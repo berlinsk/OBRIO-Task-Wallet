@@ -24,6 +24,8 @@
 		C4A4BC7C2E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC782E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift */; };
 		C4A4BC7D2E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC792E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift */; };
 		C4A4BC7F2E58FA6400A5F72F /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC7E2E58FA6400A5F72F /* CoreDataStack.swift */; };
+		C4A4BC8F2E590C5700A5F72F /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC8E2E590C5700A5F72F /* Money.swift */; };
+		C4A4BC922E590CA300A5F72F /* TransactionsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC912E590CA300A5F72F /* TransactionsRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,8 @@
 		C4A4BC782E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDTransaction+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C4A4BC792E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDTransaction+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C4A4BC7E2E58FA6400A5F72F /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		C4A4BC8E2E590C5700A5F72F /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
+		C4A4BC912E590CA300A5F72F /* TransactionsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +146,7 @@
 		1CA3B6542D22B0F500176711 /* TransactionsTestTask */ = {
 			isa = PBXGroup;
 			children = (
+				C4A4BC8C2E590C3E00A5F72F /* Support */,
 				C4A4BC732E58F99F00A5F72F /* Data */,
 				0DF1D13E2D22DC2D001626E7 /* Services */,
 				1CA3B6552D22B0F500176711 /* AppDelegate.swift */,
@@ -166,6 +171,7 @@
 		C4A4BC732E58F99F00A5F72F /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				C4A4BC902E590C9800A5F72F /* Repositories */,
 				C4A4BC742E58F9AD00A5F72F /* CoreData */,
 			);
 			path = Data;
@@ -189,6 +195,30 @@
 				C4A4BC792E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift */,
 			);
 			path = Entities;
+			sourceTree = "<group>";
+		};
+		C4A4BC8C2E590C3E00A5F72F /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4BC8D2E590C4B00A5F72F /* Utils */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		C4A4BC8D2E590C4B00A5F72F /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4BC8E2E590C5700A5F72F /* Money.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		C4A4BC902E590C9800A5F72F /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4BC912E590CA300A5F72F /* TransactionsRepository.swift */,
+			);
+			path = Repositories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,12 +351,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4A4BC922E590CA300A5F72F /* TransactionsRepository.swift in Sources */,
 				0D1540612D22EF5D00D6D63F /* AnalyticsEvent.swift in Sources */,
 				0DF1D1432D22DCD8001626E7 /* PerformOnce.swift in Sources */,
 				0DF1D1452D22DD06001626E7 /* BitcoinRateService.swift in Sources */,
 				0DF1D1472D22DD4A001626E7 /* AnalyticsService.swift in Sources */,
 				1CA3B65A2D22B0F500176711 /* HomeViewController.swift in Sources */,
 				1CA3B6562D22B0F500176711 /* AppDelegate.swift in Sources */,
+				C4A4BC8F2E590C5700A5F72F /* Money.swift in Sources */,
 				C4A4BC7A2E58F9E300A5F72F /* CDRateCache+CoreDataClass.swift in Sources */,
 				C4A4BC7F2E58FA6400A5F72F /* CoreDataStack.swift in Sources */,
 				C4A4BC7B2E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift in Sources */,
