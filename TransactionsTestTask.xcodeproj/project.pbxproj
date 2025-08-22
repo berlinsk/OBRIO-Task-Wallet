@@ -26,6 +26,7 @@
 		C4A4BC7F2E58FA6400A5F72F /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC7E2E58FA6400A5F72F /* CoreDataStack.swift */; };
 		C4A4BC8F2E590C5700A5F72F /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC8E2E590C5700A5F72F /* Money.swift */; };
 		C4A4BC922E590CA300A5F72F /* TransactionsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC912E590CA300A5F72F /* TransactionsRepository.swift */; };
+		C4A4BC942E59141B00A5F72F /* RateCacheRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC932E59141B00A5F72F /* RateCacheRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		C4A4BC7E2E58FA6400A5F72F /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		C4A4BC8E2E590C5700A5F72F /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
 		C4A4BC912E590CA300A5F72F /* TransactionsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsRepository.swift; sourceTree = "<group>"; };
+		C4A4BC932E59141B00A5F72F /* RateCacheRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateCacheRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				C4A4BC912E590CA300A5F72F /* TransactionsRepository.swift */,
+				C4A4BC932E59141B00A5F72F /* RateCacheRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 				0DF1D1432D22DCD8001626E7 /* PerformOnce.swift in Sources */,
 				0DF1D1452D22DD06001626E7 /* BitcoinRateService.swift in Sources */,
 				0DF1D1472D22DD4A001626E7 /* AnalyticsService.swift in Sources */,
+				C4A4BC942E59141B00A5F72F /* RateCacheRepository.swift in Sources */,
 				1CA3B65A2D22B0F500176711 /* HomeViewController.swift in Sources */,
 				1CA3B6562D22B0F500176711 /* AppDelegate.swift in Sources */,
 				C4A4BC8F2E590C5700A5F72F /* Money.swift in Sources */,
