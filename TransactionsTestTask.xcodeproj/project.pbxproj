@@ -14,12 +14,16 @@
 		0DF1D1472D22DD4A001626E7 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF1D1462D22DD44001626E7 /* AnalyticsService.swift */; };
 		1CA3B6562D22B0F500176711 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3B6552D22B0F500176711 /* AppDelegate.swift */; };
 		1CA3B6582D22B0F500176711 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3B6572D22B0F500176711 /* SceneDelegate.swift */; };
-		1CA3B65A2D22B0F500176711 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3B6592D22B0F500176711 /* ViewController.swift */; };
-		1CA3B65D2D22B0F500176711 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3B65C2D22B0F500176711 /* Base */; };
+		1CA3B65A2D22B0F500176711 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3B6592D22B0F500176711 /* HomeViewController.swift */; };
 		1CA3B6602D22B0F500176711 /* TransactionsTestTask.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3B65E2D22B0F500176711 /* TransactionsTestTask.xcdatamodeld */; };
 		1CA3B6622D22B0F600176711 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3B6612D22B0F600176711 /* Assets.xcassets */; };
 		1CA3B6652D22B0F600176711 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3B6642D22B0F600176711 /* Base */; };
 		1CA3B6702D22B0F600176711 /* TransactionsTestTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3B66F2D22B0F600176711 /* TransactionsTestTaskTests.swift */; };
+		C4A4BC7A2E58F9E300A5F72F /* CDRateCache+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC762E58F9E300A5F72F /* CDRateCache+CoreDataClass.swift */; };
+		C4A4BC7B2E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC772E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift */; };
+		C4A4BC7C2E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC782E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift */; };
+		C4A4BC7D2E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC792E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift */; };
+		C4A4BC7F2E58FA6400A5F72F /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC7E2E58FA6400A5F72F /* CoreDataStack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,8 +52,7 @@
 		1CA3B6522D22B0F500176711 /* TransactionsTestTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TransactionsTestTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CA3B6552D22B0F500176711 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1CA3B6572D22B0F500176711 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		1CA3B6592D22B0F500176711 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		1CA3B65C2D22B0F500176711 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1CA3B6592D22B0F500176711 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		1CA3B65F2D22B0F500176711 /* TransactionsTestTask.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TransactionsTestTask.xcdatamodel; sourceTree = "<group>"; };
 		1CA3B6612D22B0F600176711 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1CA3B6642D22B0F600176711 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -57,6 +60,11 @@
 		1CA3B66B2D22B0F600176711 /* TransactionsTestTaskTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TransactionsTestTaskTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CA3B66F2D22B0F600176711 /* TransactionsTestTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsTestTaskTests.swift; sourceTree = "<group>"; };
 		1CA3B6752D22B0F600176711 /* TransactionsTestTaskUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TransactionsTestTaskUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4A4BC762E58F9E300A5F72F /* CDRateCache+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDRateCache+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C4A4BC772E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDRateCache+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C4A4BC782E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDTransaction+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C4A4BC792E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDTransaction+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C4A4BC7E2E58FA6400A5F72F /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,11 +142,11 @@
 		1CA3B6542D22B0F500176711 /* TransactionsTestTask */ = {
 			isa = PBXGroup;
 			children = (
+				C4A4BC732E58F99F00A5F72F /* Data */,
 				0DF1D13E2D22DC2D001626E7 /* Services */,
 				1CA3B6552D22B0F500176711 /* AppDelegate.swift */,
 				1CA3B6572D22B0F500176711 /* SceneDelegate.swift */,
-				1CA3B6592D22B0F500176711 /* ViewController.swift */,
-				1CA3B65B2D22B0F500176711 /* Main.storyboard */,
+				1CA3B6592D22B0F500176711 /* HomeViewController.swift */,
 				1CA3B6612D22B0F600176711 /* Assets.xcassets */,
 				1CA3B6632D22B0F600176711 /* LaunchScreen.storyboard */,
 				1CA3B6662D22B0F600176711 /* Info.plist */,
@@ -153,6 +161,34 @@
 				1CA3B66F2D22B0F600176711 /* TransactionsTestTaskTests.swift */,
 			);
 			path = TransactionsTestTaskTests;
+			sourceTree = "<group>";
+		};
+		C4A4BC732E58F99F00A5F72F /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4BC742E58F9AD00A5F72F /* CoreData */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		C4A4BC742E58F9AD00A5F72F /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4BC752E58F9B500A5F72F /* Entities */,
+				C4A4BC7E2E58FA6400A5F72F /* CoreDataStack.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		C4A4BC752E58F9B500A5F72F /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4BC762E58F9E300A5F72F /* CDRateCache+CoreDataClass.swift */,
+				C4A4BC772E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift */,
+				C4A4BC782E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift */,
+				C4A4BC792E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift */,
+			);
+			path = Entities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,7 +297,6 @@
 			files = (
 				1CA3B6622D22B0F600176711 /* Assets.xcassets in Resources */,
 				1CA3B6652D22B0F600176711 /* Base in Resources */,
-				1CA3B65D2D22B0F500176711 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,8 +325,13 @@
 				0DF1D1432D22DCD8001626E7 /* PerformOnce.swift in Sources */,
 				0DF1D1452D22DD06001626E7 /* BitcoinRateService.swift in Sources */,
 				0DF1D1472D22DD4A001626E7 /* AnalyticsService.swift in Sources */,
-				1CA3B65A2D22B0F500176711 /* ViewController.swift in Sources */,
+				1CA3B65A2D22B0F500176711 /* HomeViewController.swift in Sources */,
 				1CA3B6562D22B0F500176711 /* AppDelegate.swift in Sources */,
+				C4A4BC7A2E58F9E300A5F72F /* CDRateCache+CoreDataClass.swift in Sources */,
+				C4A4BC7F2E58FA6400A5F72F /* CoreDataStack.swift in Sources */,
+				C4A4BC7B2E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift in Sources */,
+				C4A4BC7C2E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift in Sources */,
+				C4A4BC7D2E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift in Sources */,
 				1CA3B6582D22B0F500176711 /* SceneDelegate.swift in Sources */,
 				1CA3B6602D22B0F500176711 /* TransactionsTestTask.xcdatamodeld in Sources */,
 				0DF1D1402D22DC51001626E7 /* ServicesAssembler.swift in Sources */,
@@ -329,14 +369,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		1CA3B65B2D22B0F500176711 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1CA3B65C2D22B0F500176711 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		1CA3B6632D22B0F600176711 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -474,6 +506,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LQ43TS27BL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TransactionsTestTask/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -501,6 +534,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LQ43TS27BL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TransactionsTestTask/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
