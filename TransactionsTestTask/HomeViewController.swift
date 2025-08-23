@@ -19,7 +19,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     private let topUpButton = UIButton(type: .system)
     private let addButton = UIButton(type: .system)
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
-    private let rateLabel = UILabel()
+    private var rateItem: UIBarButtonItem!
 
     // data
     private var sections: [Section] = []
@@ -54,9 +54,8 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
 
     private func setupUI() {
         // rate(top bar right)
-        rateLabel.font = .systemFont(ofSize: 14, weight: .semibold)
-        rateLabel.text = "—"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rateLabel)
+        rateItem = UIBarButtonItem(title: "—", style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem = rateItem
 
         // balance + top up
         balanceLabel.font = .monospacedDigitSystemFont(ofSize: 22, weight: .bold)
@@ -120,7 +119,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
                 let nf = NumberFormatter()
                 nf.numberStyle = .currency
                 nf.currencyCode = "USD"
-                self.rateLabel.text = "1 BTC = \(nf.string(from: rate.usdPerBtc as NSDecimalNumber) ?? "-")"
+                self.rateItem.title = "1 BTC = \(nf.string(from: rate.usdPerBtc as NSDecimalNumber) ?? "-")"
             }
             .store(in: &bag)
     }
