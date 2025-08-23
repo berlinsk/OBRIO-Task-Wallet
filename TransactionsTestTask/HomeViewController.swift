@@ -178,8 +178,14 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         guard !isApplyingSnapshot else { return }
         isApplyingSnapshot = true
 
-        dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
-            self?.isApplyingSnapshot = false
+        if #available(iOS 15.0, *), reload { //ios15+ use reloadData ver
+            dataSource.applySnapshotUsingReloadData(snapshot) { [weak self] in
+                self?.isApplyingSnapshot = false
+            }
+        } else { // old ios use usual apply
+            dataSource.apply(snapshot, animatingDifferences: !reload) { [weak self] in
+                self?.isApplyingSnapshot = false
+            }
         }
     }
 
