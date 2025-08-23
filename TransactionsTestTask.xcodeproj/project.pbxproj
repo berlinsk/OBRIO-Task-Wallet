@@ -27,6 +27,7 @@
 		C4A4BC8F2E590C5700A5F72F /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC8E2E590C5700A5F72F /* Money.swift */; };
 		C4A4BC922E590CA300A5F72F /* TransactionsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC912E590CA300A5F72F /* TransactionsRepository.swift */; };
 		C4A4BC942E59141B00A5F72F /* RateCacheRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC932E59141B00A5F72F /* RateCacheRepository.swift */; };
+		C4A4BC972E591C0000A5F72F /* RateAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC962E591C0000A5F72F /* RateAPIClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		C4A4BC8E2E590C5700A5F72F /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
 		C4A4BC912E590CA300A5F72F /* TransactionsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsRepository.swift; sourceTree = "<group>"; };
 		C4A4BC932E59141B00A5F72F /* RateCacheRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateCacheRepository.swift; sourceTree = "<group>"; };
+		C4A4BC962E591C0000A5F72F /* RateAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateAPIClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +175,7 @@
 		C4A4BC732E58F99F00A5F72F /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				C4A4BC952E591BEE00A5F72F /* Networking */,
 				C4A4BC902E590C9800A5F72F /* Repositories */,
 				C4A4BC742E58F9AD00A5F72F /* CoreData */,
 			);
@@ -222,6 +225,14 @@
 				C4A4BC932E59141B00A5F72F /* RateCacheRepository.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		C4A4BC952E591BEE00A5F72F /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4BC962E591C0000A5F72F /* RateAPIClient.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -355,6 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4A4BC922E590CA300A5F72F /* TransactionsRepository.swift in Sources */,
+				C4A4BC972E591C0000A5F72F /* RateAPIClient.swift in Sources */,
 				0D1540612D22EF5D00D6D63F /* AnalyticsEvent.swift in Sources */,
 				0DF1D1432D22DCD8001626E7 /* PerformOnce.swift in Sources */,
 				0DF1D1452D22DD06001626E7 /* BitcoinRateService.swift in Sources */,
@@ -547,7 +559,6 @@
 				INFOPLIST_FILE = TransactionsTestTask/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -575,7 +586,6 @@
 				INFOPLIST_FILE = TransactionsTestTask/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

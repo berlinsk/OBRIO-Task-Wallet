@@ -22,6 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = root
         window.makeKeyAndVisible()
         self.window = window
+        ServicesAssembler.startRateObservers()
+        ServicesAssembler.bitcoinRateService().startUpdating(every: 180) // 3 mins
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
