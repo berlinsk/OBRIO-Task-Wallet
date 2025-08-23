@@ -6,11 +6,16 @@
 //
 
 import UIKit
+import Combine
 
 final class AddTransactionViewController: UIViewController {
     private let amountField = UITextField() //input for btc amount
     private let segment = UISegmentedControl(items: Category.allCases.map { $0.rawValue })
     private let addButton = UIButton(type: .system)
+    
+    private let viewModel: AddTransactionViewModel = ServicesAssembler.makeAddTransactionViewModel()
+    
+    private var bag = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +43,18 @@ final class AddTransactionViewController: UIViewController {
             v.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             v.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16)
         ])
+        
+        // nav back after success after addition
+        viewModel.didAdd
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.navigationController?.popViewController(animated: true) // back to home
+            }
+            .store(in: &bag)
+        
+        viewModel.errorText
+            .sink { print($0) }
+            .store(in: &bag)
     }
 
     @objc private func onAdd() {
@@ -45,23 +62,6 @@ final class AddTransactionViewController: UIViewController {
               let dec = Decimal(string: text), dec > 0 else { return }
 
         let cat = Category.allCases[segment.selectedSegmentIndex] // get chosen category
-        do {
-            try ServicesAssembler.addExpenseUseCase().execute( //save expense to repo
-                amountBTC: dec,
-                category: cat,
-                date: Date()
-            )
-            ServicesAssembler.trackEventUseCase().execute( // expence log
-                "expense_add",
-                [
-                    "amount_btc":"\(dec)",
-                    "category":cat.rawValue
-                ]
-            )
-            NotificationCenter.default.post(name: .transactionsChanged, object: nil) //fire notification
-            navigationController?.popViewController(animated: true) // back to home
-        } catch {
-            print("add expense failed:", error)
-        }
+        viewModel.addExpense(amountBTC: dec, category: cat)
     }
 }

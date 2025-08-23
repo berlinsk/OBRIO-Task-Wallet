@@ -23,6 +23,24 @@ enum ServicesAssembler {
         let stack = CoreDataStack()
         return { stack }
     }()
+    
+    // MARK: - VM factories
+    static func makeHomeViewModel() -> HomeViewModel {
+        HomeViewModelImpl(
+            observeRate: observeRateUseCase(),
+            getBalance: getBalanceUseCase(),
+            addIncome: addIncomeUseCase(),
+            trackEvent: trackEventUseCase(),
+            getPage: getTransactionsPageUseCase()
+        )
+    }
+    
+    static func makeAddTransactionViewModel() -> AddTransactionViewModel {
+        AddTransactionViewModelImpl(
+            addExpense: addExpenseUseCase(),
+            trackEvent: trackEventUseCase()
+        )
+    }
 
     // MARK: - Rate infrastructure
     // repository that caches last BTC/USD rate in coredata

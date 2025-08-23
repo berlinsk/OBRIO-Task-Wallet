@@ -7,13 +7,16 @@
 import UIKit
 import Combine
 
-private struct Section {
+struct Section {
     let key: String   // yyyy-mm-dd
     let date: Date
     var items: [TransactionEntity]
 }
 
 final class HomeViewController: UIViewController, UITableViewDelegate {
+    // vm
+    private let viewModel = ServicesAssembler.makeHomeViewModel()
+    
     // UI
     private let balanceLabel = UILabel()
     private let topUpButton = UIButton(type: .system)
@@ -25,12 +28,6 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     private var sections: [Section] = []
     private var txs: [TransactionEntity] = []
     private var dataSource: UITableViewDiffableDataSource<String, UUID>!
-
-    // paging
-    private var offset = 0
-    private let pageSize = 20
-    private var isLoading = false
-    private var hasMore = true
 
     // snapshot state
     private var isApplyingSnapshot = false
@@ -45,11 +42,13 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         setupUI()
         setupDataSource()
         bindRate()
+        bindViewModelOutputs()
 
         NotificationCenter.default.addObserver(self, selector: #selector(onTxChanged), name: .transactionsChanged, object: nil) // reload table when new tx added
 
         loadFirstPage()
         updateBalanceLabel()
+        viewModel.refreshBalance() // initial balance push
     }
 
     private func setupUI() {
@@ -107,7 +106,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         dataSource = UITableViewDiffableDataSource<String, UUID>(tableView: tableView) { [weak self] tableView, indexPath, _ in
             guard let self else { return UITableViewCell() }
             let cell = tableView.dequeueReusableCell(withIdentifier: TransactionCell.reuseID, for: indexPath) as! TransactionCell
-            let tx = self.sections[indexPath.section].items[indexPath.row]
+            let tx = self.viewModel.transaction(at: indexPath)
             cell.configure(with: tx)
             return cell
         }
@@ -127,60 +126,44 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
             }
             .store(in: &bag)
     }
+    
+    private func bindViewModelOutputs() {
+        viewModel.rateText
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] text in
+                self?.rateItem.title = text
+            }
+            .store(in: &bag)
+
+        viewModel.balanceText
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] text in
+                self?.balanceLabel.text = text
+            }
+            .store(in: &bag)
+        
+        // compiled snapshot from vm
+        viewModel.snapshot
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] snapshot in
+                self?.applySnapshot(snapshot, reload: true)
+            }
+            .store(in: &bag)
+    }
 
     // loading/grouping
     private func loadFirstPage() {
-        offset = 0
-        hasMore = true
-        txs.removeAll()
-        loadNextPage()
+        viewModel.loadFirstPage()
     }
 
     private func loadNextPage() {
-        guard !isLoading, hasMore, !isApplyingSnapshot else { return } //doesnt load if busy or no more or snapshot aplying
-        isLoading = true
-        do {
-            let page = try ServicesAssembler.getTransactionsPageUseCase().execute(offset: offset, limit: pageSize)
-            txs.append(contentsOf: page)
-            offset += page.count
-            hasMore = page.count == pageSize
-            regroupAndApplySnapshot(reload: true) //redrawing
-            updateBalanceLabel()
-            
-            ServicesAssembler.trackEventUseCase().execute( // pagination log
-                "tx_page_loaded",
-                [
-                    "offset":"\(offset)",
-                    "count":"\(page.count)"
-                ]
-            )
-        } catch {
-            print("Fetch page failed:", error)
-        }
-        isLoading = false
+        guard !isApplyingSnapshot else { return } //doesnt load if busy or no more or snapshot aplying
+        viewModel.loadNextPage()
     }
 
     private func regroupAndApplySnapshot(reload: Bool = true) {
         // group tx by day
-        let cal = Calendar.current
-        let grouped = Dictionary(grouping: txs) { (tx: TransactionEntity) -> String in
-            let d = cal.startOfDay(for: tx.createdAt)
-            return Self.dayKey(from: d)
-        }
-
-        var tmp: [Section] = grouped.map { (key, items) in
-            let d = Self.dayDate(fromKey: key)!
-            return Section(key: key, date: d, items: items.sorted { ($0.createdAt, $0.id.uuidString) > ($1.createdAt, $1.id.uuidString) })
-        }
-        tmp.sort { $0.date > $1.date }
-        sections = tmp
-
-        // apply diffable snapshot
-        var snapshot = NSDiffableDataSourceSnapshot<String, UUID>()
-        snapshot.appendSections(sections.map { $0.key })
-        for sec in sections {
-            snapshot.appendItems(sec.items.map { $0.id }, toSection: sec.key)
-        }
+        let snapshot = viewModel.currentSnapshot()
         applySnapshot(snapshot, reload: reload)
     }
     
@@ -222,11 +205,11 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     
     // table delegate for section headers
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let sec = sections[section]
+        let secDate = viewModel.sectionDate(for: section)
         let df = DateFormatter()
         df.dateStyle = .medium
         df.timeStyle = .none
-        let title = df.string(from: sec.date)
+        let title = df.string(from: secDate)
 
         let label = UILabel()
         label.text = title
@@ -252,13 +235,8 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     // table delegate for pagination trigger
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if isApplyingSnapshot { return } //doesnt paginate during apply
-        let lastSection = max(sections.count - 1, 0)
-        if sections.indices.contains(lastSection),
-           indexPath.section == lastSection {
-            let lastRow = sections[lastSection].items.count - 3
-            if indexPath.row >= max(lastRow, 0) {
-                loadNextPage()
-            }
+        if viewModel.shouldLoadMore(near: indexPath) {
+            loadNextPage()
         }
     }
 
@@ -273,21 +251,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         ac.addAction(UIAlertAction(title: "Add", style: .default, handler: { _ in
             guard let t = ac.textFields?.first?.text?.replacingOccurrences(of: ",", with: "."),
                   let dec = Decimal(string: t), dec > 0 else { return }
-            do {
-                try ServicesAssembler.addIncomeUseCase().execute(
-                    amountBTC: dec,
-                    date: Date()
-                )
-                ServicesAssembler.trackEventUseCase().execute( // top up opeartions log
-                    "topup_add",
-                    [
-                        "amount_btc":"\(dec)"
-                    ]
-                )
-                NotificationCenter.default.post(name: .transactionsChanged, object: nil) // reload
-            } catch {
-                print("Top up failed:", error)
-            }
+            self.viewModel.topUp(amountBTC: dec)
         }))
         present(ac, animated: true)
     }
@@ -298,6 +262,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
 
     @objc private func onTxChanged() {
         loadFirstPage() // reload tx after change
+        viewModel.refreshBalance() // sync balance with vm
     }
     
     @objc private func onShowLogs() {

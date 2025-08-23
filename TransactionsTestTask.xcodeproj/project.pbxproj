@@ -40,6 +40,8 @@
 		C4A4BCB32E5A3A1400A5F72F /* RateControlUseCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCB22E5A3A1400A5F72F /* RateControlUseCases.swift */; };
 		C4A4BCB52E5A3A2500A5F72F /* TrackEventUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCB42E5A3A2500A5F72F /* TrackEventUseCase.swift */; };
 		C4A4BCB82E5A42C600A5F72F /* GetAllAnalyticsEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCB72E5A42C600A5F72F /* GetAllAnalyticsEvents.swift */; };
+		C4A4BCBA2E5A495600A5F72F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCB92E5A495600A5F72F /* HomeViewModel.swift */; };
+		C4A4BCBC2E5A7D7C00A5F72F /* AddTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCBB2E5A7D7C00A5F72F /* AddTransactionViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +99,8 @@
 		C4A4BCB22E5A3A1400A5F72F /* RateControlUseCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateControlUseCases.swift; sourceTree = "<group>"; };
 		C4A4BCB42E5A3A2500A5F72F /* TrackEventUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackEventUseCase.swift; sourceTree = "<group>"; };
 		C4A4BCB72E5A42C600A5F72F /* GetAllAnalyticsEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllAnalyticsEvents.swift; sourceTree = "<group>"; };
+		C4A4BCB92E5A495600A5F72F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		C4A4BCBB2E5A7D7C00A5F72F /* AddTransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,7 +186,6 @@
 				0DF1D13E2D22DC2D001626E7 /* Services */,
 				1CA3B6552D22B0F500176711 /* AppDelegate.swift */,
 				1CA3B6572D22B0F500176711 /* SceneDelegate.swift */,
-				1CA3B6592D22B0F500176711 /* HomeViewController.swift */,
 				1CA3B6612D22B0F600176711 /* Assets.xcassets */,
 				1CA3B6632D22B0F600176711 /* LaunchScreen.storyboard */,
 				1CA3B6662D22B0F600176711 /* Info.plist */,
@@ -276,6 +279,8 @@
 			isa = PBXGroup;
 			children = (
 				C4A4BC9C2E5942A700A5F72F /* TransactionCell.swift */,
+				C4A4BCB92E5A495600A5F72F /* HomeViewModel.swift */,
+				1CA3B6592D22B0F500176711 /* HomeViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -284,6 +289,7 @@
 			isa = PBXGroup;
 			children = (
 				C4A4BCA32E594BC400A5F72F /* AddTransactionViewController.swift */,
+				C4A4BCBB2E5A7D7C00A5F72F /* AddTransactionViewModel.swift */,
 			);
 			path = AddTransaction;
 			sourceTree = "<group>";
@@ -460,6 +466,7 @@
 				C4A4BCA42E594BC400A5F72F /* AddTransactionViewController.swift in Sources */,
 				C4A4BC7F2E58FA6400A5F72F /* CoreDataStack.swift in Sources */,
 				C4A4BCB82E5A42C600A5F72F /* GetAllAnalyticsEvents.swift in Sources */,
+				C4A4BCBC2E5A7D7C00A5F72F /* AddTransactionViewModel.swift in Sources */,
 				C4A4BC7B2E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift in Sources */,
 				C4A4BC7C2E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift in Sources */,
 				C4A4BC7D2E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift in Sources */,
@@ -470,6 +477,7 @@
 				C4A4BCA62E5A2D7400A5F72F /* ReachabilityService.swift in Sources */,
 				0DF1D1402D22DC51001626E7 /* ServicesAssembler.swift in Sources */,
 				C4A4BCAD2E5A39FA00A5F72F /* GetTransactionsPageUseCase.swift in Sources */,
+				C4A4BCBA2E5A495600A5F72F /* HomeViewModel.swift in Sources */,
 				C4A4BCB12E5A3A0B00A5F72F /* ObserveRateUseCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
