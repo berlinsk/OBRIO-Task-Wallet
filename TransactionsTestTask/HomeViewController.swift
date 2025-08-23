@@ -241,7 +241,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     }
 
     @objc private func onAddTransaction() {
-        print("vc2") // stub for second screen(i haven't had it yet)
+        navigationController?.pushViewController(AddTransactionViewController(), animated: true) // navigation second screen
     }
 
     @objc private func onTxChanged() {
