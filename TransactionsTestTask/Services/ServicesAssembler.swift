@@ -52,6 +52,12 @@ enum ServicesAssembler {
         return { service }
     }()
     
+    // MARK: - Transactions
+    static let transactionsRepository: PerformOnce<TransactionsRepository> = {
+        let repo = TransactionsRepositoryImpl(stack: coreData())
+        return { repo } // return singleton repo
+    }()
+    
     // MARK: - AnalyticsService
     
     static let analyticsService: PerformOnce<AnalyticsService> = {
