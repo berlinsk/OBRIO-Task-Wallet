@@ -32,6 +32,9 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     private var isLoading = false
     private var hasMore = true
 
+    // snapshot state
+    private var isApplyingSnapshot = false
+
     // combine
     private var bag = Set<AnyCancellable>()
 
@@ -98,11 +101,10 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
 
     private func setupDataSource() {
         // diffable ds for tx list
-        dataSource = UITableViewDiffableDataSource<String, UUID>(tableView: tableView) {
-            tableView, indexPath, itemID -> UITableViewCell? in
+        dataSource = UITableViewDiffableDataSource<String, UUID>(tableView: tableView) { [weak self] tableView, indexPath, _ in
+            guard let self else { return UITableViewCell() }
             let cell = tableView.dequeueReusableCell(withIdentifier: TransactionCell.reuseID, for: indexPath) as! TransactionCell
-            let secKey = self.sections[indexPath.section].key
-            let tx = self.sections.first(where: { $0.key == secKey })!.items[indexPath.row]
+            let tx = self.sections[indexPath.section].items[indexPath.row]
             cell.configure(with: tx)
             return cell
         }
@@ -132,14 +134,14 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     }
 
     private func loadNextPage() {
-        guard !isLoading, hasMore else { return }
+        guard !isLoading, hasMore, !isApplyingSnapshot else { return } //doesnt load if busy or no more or snapshot aplying
         isLoading = true
         do {
             let page = try ServicesAssembler.transactionsRepository().fetchPage(offset: offset, limit: pageSize)
             txs.append(contentsOf: page)
             offset += page.count
             hasMore = page.count == pageSize
-            regroupAndApplySnapshot()
+            regroupAndApplySnapshot(reload: true) //redrawing
             updateBalanceLabel()
         } catch {
             print("Fetch page failed:", error)
@@ -147,13 +149,12 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         isLoading = false
     }
 
-    private func regroupAndApplySnapshot() {
+    private func regroupAndApplySnapshot(reload: Bool = true) {
         // group tx by day
         let cal = Calendar.current
         let grouped = Dictionary(grouping: txs) { (tx: TransactionEntity) -> String in
             let d = cal.startOfDay(for: tx.createdAt)
-            let key = Self.dayKey(from: d)
-            return key
+            return Self.dayKey(from: d)
         }
 
         var tmp: [Section] = grouped.map { (key, items) in
@@ -165,11 +166,21 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
 
         // apply diffable snapshot
         var snapshot = NSDiffableDataSourceSnapshot<String, UUID>()
+        snapshot.appendSections(sections.map { $0.key })
         for sec in sections {
-            snapshot.appendSections([sec.key])
             snapshot.appendItems(sec.items.map { $0.id }, toSection: sec.key)
         }
-        dataSource.apply(snapshot, animatingDifferences: true)
+        applySnapshot(snapshot, reload: reload)
+    }
+    
+    // prevent double apply
+    private func applySnapshot(_ snapshot: NSDiffableDataSourceSnapshot<String, UUID>, reload: Bool) {
+        guard !isApplyingSnapshot else { return }
+        isApplyingSnapshot = true
+
+        dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
+            self?.isApplyingSnapshot = false
+        }
     }
 
     private static func dayKey(from date: Date) -> String {
@@ -192,25 +203,47 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
             balanceLabel.text = "Balance: —"
         }
     }
+    
+    // table delegate for section headers
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let sec = sections[section]
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .none
+        let title = df.string(from: sec.date)
+
+        let label = UILabel()
+        label.text = title
+        label.font = .systemFont(ofSize: 13, weight: .semibold)
+        label.textColor = .secondaryLabel
+
+        let container = UIView()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            label.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -16),
+            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+        ])
+        return container
+    }
+
+    // table delegate for header height
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 28
+    }
 
     // table delegate for pagination trigger
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let lastSection = sections.count - 1
-        if indexPath.section == lastSection {
+        if isApplyingSnapshot { return } //doesnt paginate during apply
+        let lastSection = max(sections.count - 1, 0)
+        if sections.indices.contains(lastSection),
+           indexPath.section == lastSection {
             let lastRow = sections[lastSection].items.count - 3
             if indexPath.row >= max(lastRow, 0) {
                 loadNextPage()
             }
         }
-    }
-
-    // table delegate for section headers
-    private func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let sec = sections[section]
-        let df = DateFormatter()
-        df.dateStyle = .medium
-        df.timeStyle = .none
-        return df.string(from: sec.date)
     }
 
     // actions
