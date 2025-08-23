@@ -50,7 +50,10 @@ final class TransactionsRepositoryImpl: TransactionsRepository {
     func fetchPage(offset: Int, limit: Int) throws -> [TransactionEntity] {
         let ctx = stack.viewContext
         let req = CDTransaction.fetchRequest()
-        req.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
+        req.sortDescriptors = [
+            NSSortDescriptor(key: "createdAt", ascending: false),
+            NSSortDescriptor(key: "id", ascending: false) // secondary sorter(if we have 2+ transactions at one point in time)
+        ]
         req.fetchOffset = offset
         req.fetchLimit = limit
         req.fetchBatchSize = 20 // for pagination

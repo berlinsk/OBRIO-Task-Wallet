@@ -159,7 +159,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
 
         var tmp: [Section] = grouped.map { (key, items) in
             let d = Self.dayDate(fromKey: key)!
-            return Section(key: key, date: d, items: items.sorted { $0.createdAt > $1.createdAt })
+            return Section(key: key, date: d, items: items.sorted { ($0.createdAt, $0.id.uuidString) > ($1.createdAt, $1.id.uuidString) })
         }
         tmp.sort { $0.date > $1.date }
         sections = tmp
