@@ -44,18 +44,16 @@ final class AddTransactionViewController: UIViewController {
         guard let text = amountField.text?.replacingOccurrences(of: ",", with: "."), //read field, replace , to .
               let dec = Decimal(string: text), dec > 0 else { return }
 
-        let sats = Money.sats(fromBTC: dec) //btc to sats
         let cat = Category.allCases[segment.selectedSegmentIndex] // get chosen category
         do {
-            try ServicesAssembler.transactionsRepository().add( //save expense to repo
-                amountSats: sats,
-                type: .expense,
+            try ServicesAssembler.addExpenseUseCase().execute( //save expense to repo
+                amountBTC: dec,
                 category: cat,
                 date: Date()
             )
-            ServicesAssembler.analyticsService().trackEvent( // expence log
-                name: "expense_add",
-                parameters: [
+            ServicesAssembler.trackEventUseCase().execute( // expence log
+                "expense_add",
+                [
                     "amount_btc":"\(dec)",
                     "category":cat.rawValue
                 ]

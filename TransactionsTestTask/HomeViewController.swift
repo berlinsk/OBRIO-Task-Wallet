@@ -116,7 +116,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
 
     private func bindRate() {
         // subscribe btc rate updates
-        ServicesAssembler.bitcoinRateService().ratePublisher
+        ServicesAssembler.observeRateUseCase().publisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] rate in
                 guard let self else { return }
@@ -140,16 +140,16 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         guard !isLoading, hasMore, !isApplyingSnapshot else { return } //doesnt load if busy or no more or snapshot aplying
         isLoading = true
         do {
-            let page = try ServicesAssembler.transactionsRepository().fetchPage(offset: offset, limit: pageSize)
+            let page = try ServicesAssembler.getTransactionsPageUseCase().execute(offset: offset, limit: pageSize)
             txs.append(contentsOf: page)
             offset += page.count
             hasMore = page.count == pageSize
             regroupAndApplySnapshot(reload: true) //redrawing
             updateBalanceLabel()
             
-            ServicesAssembler.analyticsService().trackEvent( // pagination log
-                name: "tx_page_loaded",
-                parameters: [
+            ServicesAssembler.trackEventUseCase().execute( // pagination log
+                "tx_page_loaded",
+                [
                     "offset":"\(offset)",
                     "count":"\(page.count)"
                 ]
@@ -213,8 +213,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
 
     private func updateBalanceLabel() { // recalc balance from repo
         do {
-            let sats = try ServicesAssembler.transactionsRepository().totalBalanceSats()
-            let btc = Money.btc(fromSats: sats)
+            let btc = try ServicesAssembler.getBalanceUseCase().execute()
             balanceLabel.text = "Balance: \(Money.formatBTC(btc)) BTC"
         } catch {
             balanceLabel.text = "Balance: —"
@@ -274,17 +273,14 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         ac.addAction(UIAlertAction(title: "Add", style: .default, handler: { _ in
             guard let t = ac.textFields?.first?.text?.replacingOccurrences(of: ",", with: "."),
                   let dec = Decimal(string: t), dec > 0 else { return }
-            let sats = Money.sats(fromBTC: dec)
             do {
-                try ServicesAssembler.transactionsRepository().add(
-                    amountSats: sats,
-                    type: .income,
-                    category: nil,
+                try ServicesAssembler.addIncomeUseCase().execute(
+                    amountBTC: dec,
                     date: Date()
                 )
-                ServicesAssembler.analyticsService().trackEvent( // top up opeartions log
-                    name: "topup_add",
-                    parameters: [
+                ServicesAssembler.trackEventUseCase().execute( // top up opeartions log
+                    "topup_add",
+                    [
                         "amount_btc":"\(dec)"
                     ]
                 )
@@ -305,7 +301,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     }
     
     @objc private func onShowLogs() {
-        let events = ServicesAssembler.analyticsService().allEvents()
+        let events = ServicesAssembler.getAllAnalyticsEventsUseCase().execute()
         if events.isEmpty {
             let ac = UIAlertController(title: "Logs", message: "No events yet", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "OK", style: .default))
@@ -314,9 +310,9 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         }
 
         // compact text assembly
+        let iso = ISO8601DateFormatter()
         let lines = events.map { ev in
-            let ts = ISO8601DateFormatter().string(from: ev.date)
-            return "\(ts) | \(ev.name) | \(ev.parameters)"
+            "\(iso.string(from: ev.date)) | \(ev.name) | \(ev.parameters)"
         }.joined(separator: "\n")
 
         let ac = UIAlertController(title: "Logs", message: lines, preferredStyle: .alert)

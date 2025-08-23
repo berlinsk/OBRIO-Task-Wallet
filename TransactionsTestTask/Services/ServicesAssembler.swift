@@ -105,5 +105,54 @@ enum ServicesAssembler {
         }
     }
     
+    // UseCaese according to DI logic
+    // MARK: Transactions useCases
+    static let addIncomeUseCase: PerformOnce<AddIncomeUseCase> = {
+        let uc = AddIncomeUseCaseImpl(repo: transactionsRepository())
+        return { uc }
+    }()
+
+    static let addExpenseUseCase: PerformOnce<AddExpenseUseCase> = {
+        let uc = AddExpenseUseCaseImpl(repo: transactionsRepository())
+        return { uc }
+    }()
+
+    static let getTransactionsPageUseCase: PerformOnce<GetTransactionsPageUseCase> = {
+        let uc = GetTransactionsPageUseCaseImpl(repo: transactionsRepository())
+        return { uc }
+    }()
+
+    static let getBalanceUseCase: PerformOnce<GetBalanceUseCase> = {
+        let uc = GetBalanceUseCaseImpl(repo: transactionsRepository())
+        return { uc }
+    }()
+
+    // MARK: Rate useCases
+    static let observeRateUseCase: PerformOnce<ObserveRateUseCase> = {
+        let uc = ObserveRateUseCaseImpl(rateService: bitcoinRateService())
+        return { uc }
+    }()
+
+    static let startRateUpdatesUseCase: PerformOnce<StartRateUpdatesUseCase> = {
+        let uc = StartRateUpdatesUseCaseImpl(svc: bitcoinRateService())
+        return { uc }
+    }()
+
+    static let refreshRateNowUseCase: PerformOnce<RefreshRateNowUseCase> = {
+        let uc = RefreshRateNowUseCaseImpl(svc: bitcoinRateService())
+        return { uc }
+    }()
+
+    // MARK: Analytics useCases
+    static let trackEventUseCase: PerformOnce<TrackEventUseCase> = {
+        let uc = TrackEventUseCaseImpl(analytics: analyticsService())
+        return { uc }
+    }()
+    
+    static let getAllAnalyticsEventsUseCase: PerformOnce<GetAllAnalyticsEventsUseCase> = {
+        let uc = GetAllAnalyticsEventsUseCaseImpl(analytics: analyticsService())
+        return { uc }
+    }()
+    
     private static var _observers: [Any] = [] // retained holders for observers(they aren't deallocated)
 }

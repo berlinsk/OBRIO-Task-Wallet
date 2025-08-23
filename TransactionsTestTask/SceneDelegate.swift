@@ -31,7 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             .store(in: &bag)
         ServicesAssembler.startRateObservers()
-        ServicesAssembler.bitcoinRateService().startUpdating(every: 180) // 3 mins
+        ServicesAssembler.startRateUpdatesUseCase().start(every: 180) // 3 mins
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -44,7 +44,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
-        ServicesAssembler.bitcoinRateService().refreshNow()
+        ServicesAssembler.refreshRateNowUseCase().execute()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {

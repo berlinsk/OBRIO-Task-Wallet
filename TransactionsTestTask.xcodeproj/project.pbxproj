@@ -32,6 +32,14 @@
 		C4A4BC9F2E59450800A5F72F /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC9E2E59450800A5F72F /* Notifications.swift */; };
 		C4A4BCA42E594BC400A5F72F /* AddTransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCA32E594BC400A5F72F /* AddTransactionViewController.swift */; };
 		C4A4BCA62E5A2D7400A5F72F /* ReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCA52E5A2D7400A5F72F /* ReachabilityService.swift */; };
+		C4A4BCA92E5A39E400A5F72F /* AddIncomeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCA82E5A39E400A5F72F /* AddIncomeUseCase.swift */; };
+		C4A4BCAB2E5A39EF00A5F72F /* AddExpenseUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCAA2E5A39EF00A5F72F /* AddExpenseUseCase.swift */; };
+		C4A4BCAD2E5A39FA00A5F72F /* GetTransactionsPageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCAC2E5A39FA00A5F72F /* GetTransactionsPageUseCase.swift */; };
+		C4A4BCAF2E5A3A0300A5F72F /* GetBalanceUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCAE2E5A3A0300A5F72F /* GetBalanceUseCase.swift */; };
+		C4A4BCB12E5A3A0B00A5F72F /* ObserveRateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCB02E5A3A0B00A5F72F /* ObserveRateUseCase.swift */; };
+		C4A4BCB32E5A3A1400A5F72F /* RateControlUseCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCB22E5A3A1400A5F72F /* RateControlUseCases.swift */; };
+		C4A4BCB52E5A3A2500A5F72F /* TrackEventUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCB42E5A3A2500A5F72F /* TrackEventUseCase.swift */; };
+		C4A4BCB82E5A42C600A5F72F /* GetAllAnalyticsEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCB72E5A42C600A5F72F /* GetAllAnalyticsEvents.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +89,14 @@
 		C4A4BC9E2E59450800A5F72F /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		C4A4BCA32E594BC400A5F72F /* AddTransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionViewController.swift; sourceTree = "<group>"; };
 		C4A4BCA52E5A2D7400A5F72F /* ReachabilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityService.swift; sourceTree = "<group>"; };
+		C4A4BCA82E5A39E400A5F72F /* AddIncomeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIncomeUseCase.swift; sourceTree = "<group>"; };
+		C4A4BCAA2E5A39EF00A5F72F /* AddExpenseUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseUseCase.swift; sourceTree = "<group>"; };
+		C4A4BCAC2E5A39FA00A5F72F /* GetTransactionsPageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetTransactionsPageUseCase.swift; sourceTree = "<group>"; };
+		C4A4BCAE2E5A3A0300A5F72F /* GetBalanceUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBalanceUseCase.swift; sourceTree = "<group>"; };
+		C4A4BCB02E5A3A0B00A5F72F /* ObserveRateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserveRateUseCase.swift; sourceTree = "<group>"; };
+		C4A4BCB22E5A3A1400A5F72F /* RateControlUseCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateControlUseCases.swift; sourceTree = "<group>"; };
+		C4A4BCB42E5A3A2500A5F72F /* TrackEventUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackEventUseCase.swift; sourceTree = "<group>"; };
+		C4A4BCB72E5A42C600A5F72F /* GetAllAnalyticsEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllAnalyticsEvents.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +175,7 @@
 		1CA3B6542D22B0F500176711 /* TransactionsTestTask */ = {
 			isa = PBXGroup;
 			children = (
+				C4A4BCA72E5A39D600A5F72F /* Domain */,
 				C4A4BC9A2E59428C00A5F72F /* Presentation */,
 				C4A4BC8C2E590C3E00A5F72F /* Support */,
 				C4A4BC732E58F99F00A5F72F /* Data */,
@@ -269,6 +286,29 @@
 				C4A4BCA32E594BC400A5F72F /* AddTransactionViewController.swift */,
 			);
 			path = AddTransaction;
+			sourceTree = "<group>";
+		};
+		C4A4BCA72E5A39D600A5F72F /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4BCB62E5A42BB00A5F72F /* UseCases */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		C4A4BCB62E5A42BB00A5F72F /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4BCA82E5A39E400A5F72F /* AddIncomeUseCase.swift */,
+				C4A4BCAA2E5A39EF00A5F72F /* AddExpenseUseCase.swift */,
+				C4A4BCAC2E5A39FA00A5F72F /* GetTransactionsPageUseCase.swift */,
+				C4A4BCAE2E5A3A0300A5F72F /* GetBalanceUseCase.swift */,
+				C4A4BCB02E5A3A0B00A5F72F /* ObserveRateUseCase.swift */,
+				C4A4BCB22E5A3A1400A5F72F /* RateControlUseCases.swift */,
+				C4A4BCB42E5A3A2500A5F72F /* TrackEventUseCase.swift */,
+				C4A4BCB72E5A42C600A5F72F /* GetAllAnalyticsEvents.swift */,
+			);
+			path = UseCases;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -402,9 +442,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4A4BC9F2E59450800A5F72F /* Notifications.swift in Sources */,
+				C4A4BCB52E5A3A2500A5F72F /* TrackEventUseCase.swift in Sources */,
 				C4A4BC922E590CA300A5F72F /* TransactionsRepository.swift in Sources */,
 				C4A4BC972E591C0000A5F72F /* RateAPIClient.swift in Sources */,
 				0D1540612D22EF5D00D6D63F /* AnalyticsEvent.swift in Sources */,
+				C4A4BCAB2E5A39EF00A5F72F /* AddExpenseUseCase.swift in Sources */,
 				0DF1D1432D22DCD8001626E7 /* PerformOnce.swift in Sources */,
 				0DF1D1452D22DD06001626E7 /* BitcoinRateService.swift in Sources */,
 				0DF1D1472D22DD4A001626E7 /* AnalyticsService.swift in Sources */,
@@ -413,16 +455,22 @@
 				1CA3B6562D22B0F500176711 /* AppDelegate.swift in Sources */,
 				C4A4BC8F2E590C5700A5F72F /* Money.swift in Sources */,
 				C4A4BC7A2E58F9E300A5F72F /* CDRateCache+CoreDataClass.swift in Sources */,
+				C4A4BCB32E5A3A1400A5F72F /* RateControlUseCases.swift in Sources */,
+				C4A4BCAF2E5A3A0300A5F72F /* GetBalanceUseCase.swift in Sources */,
 				C4A4BCA42E594BC400A5F72F /* AddTransactionViewController.swift in Sources */,
 				C4A4BC7F2E58FA6400A5F72F /* CoreDataStack.swift in Sources */,
+				C4A4BCB82E5A42C600A5F72F /* GetAllAnalyticsEvents.swift in Sources */,
 				C4A4BC7B2E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift in Sources */,
 				C4A4BC7C2E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift in Sources */,
 				C4A4BC7D2E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift in Sources */,
 				1CA3B6582D22B0F500176711 /* SceneDelegate.swift in Sources */,
 				1CA3B6602D22B0F500176711 /* TransactionsTestTask.xcdatamodeld in Sources */,
 				C4A4BC9D2E5942A700A5F72F /* TransactionCell.swift in Sources */,
+				C4A4BCA92E5A39E400A5F72F /* AddIncomeUseCase.swift in Sources */,
 				C4A4BCA62E5A2D7400A5F72F /* ReachabilityService.swift in Sources */,
 				0DF1D1402D22DC51001626E7 /* ServicesAssembler.swift in Sources */,
+				C4A4BCAD2E5A39FA00A5F72F /* GetTransactionsPageUseCase.swift in Sources */,
+				C4A4BCB12E5A3A0B00A5F72F /* ObserveRateUseCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
