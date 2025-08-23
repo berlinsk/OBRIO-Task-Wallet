@@ -13,6 +13,9 @@ import Combine
 /// Imagine having rate updates in 20-50 diffent modules
 /// Make this logic not depending on any module
 enum ServicesAssembler {
+    
+    //local storage of di layer subscriptions(to avoid debinding)
+    private static var _bag = Set<AnyCancellable>()
 
     // MARK: - CoreData
     // single CoreData stack shared across the app
@@ -33,6 +36,11 @@ enum ServicesAssembler {
         let api = CoinbaseRateAPIClient()
         return { api }
     }()
+    
+    static let reachability: PerformOnce<ReachabilityService> = {
+        let r = ReachabilityService()
+        return { r }
+    }()
 
     // MARK: - BitcoinRateService
     // service for fetching rate on a timer, publishing updates via Combine, caching last value to CoreData
@@ -44,6 +52,13 @@ enum ServicesAssembler {
         )
 
         service.onRateUpdate = { _ in } // callback
+        
+        // instant refresh of the course when network apperaed
+        reachability().publisher
+            .removeDuplicates()
+            .filter { $0 } //only when the network's available
+            .sink { _ in service.refreshNow() }
+            .store(in: &_bag)
 
         return { service }
     }()

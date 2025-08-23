@@ -17,6 +17,7 @@ protocol BitcoinRateService: AnyObject {
     var ratePublisher: AnyPublisher<RateEntity, Never> { get } // modern combine publisher
     func startUpdating(every seconds: TimeInterval) //start polling
     func stop() //stop polling
+    func refreshNow() //instant fetch
 }
 
 final class BitcoinRateServiceImpl {
@@ -43,6 +44,30 @@ final class BitcoinRateServiceImpl {
     // publisher that emits rates without duplicates(ignores same value)
     var ratePublisher: AnyPublisher<RateEntity, Never> {
         subject.compactMap { $0 }.removeDuplicates { $0.usdPerBtc == $1.usdPerBtc }.eraseToAnyPublisher()
+    }
+    
+    private func fetchOnce() {
+        api.fetchBtcUsd()
+            .catch { _ in Empty<Decimal, Never>() }
+            .sink { [weak self] dec in
+                guard let self else { return }
+                let entity = RateEntity(usdPerBtc: dec, updatedAt: Date())
+                try? self.cache.save(entity)
+                self.subject.send(entity)
+                self.analytics.trackEvent(
+                    name: "bitcoin_rate_update",
+                    parameters: [
+                        "rate":"\(dec)",
+                        "ts":"\(entity.updatedAt.timeIntervalSince1970)"
+                    ]
+                )
+                self.onRateUpdate?(NSDecimalNumber(decimal: dec).doubleValue)
+            }
+            .store(in: &bag)
+    }
+
+    func refreshNow() {
+        fetchOnce()
     }
     
     // periodic updates

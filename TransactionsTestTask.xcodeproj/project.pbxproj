@@ -31,6 +31,7 @@
 		C4A4BC9D2E5942A700A5F72F /* TransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC9C2E5942A700A5F72F /* TransactionCell.swift */; };
 		C4A4BC9F2E59450800A5F72F /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC9E2E59450800A5F72F /* Notifications.swift */; };
 		C4A4BCA42E594BC400A5F72F /* AddTransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCA32E594BC400A5F72F /* AddTransactionViewController.swift */; };
+		C4A4BCA62E5A2D7400A5F72F /* ReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCA52E5A2D7400A5F72F /* ReachabilityService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		C4A4BC9C2E5942A700A5F72F /* TransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCell.swift; sourceTree = "<group>"; };
 		C4A4BC9E2E59450800A5F72F /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		C4A4BCA32E594BC400A5F72F /* AddTransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionViewController.swift; sourceTree = "<group>"; };
+		C4A4BCA52E5A2D7400A5F72F /* ReachabilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 			children = (
 				0DF1D1412D22DCC3001626E7 /* Helpers */,
 				0DF1D13F2D22DC4B001626E7 /* ServicesAssembler.swift */,
+				C4A4BCA52E5A2D7400A5F72F /* ReachabilityService.swift */,
 				0DF1D1442D22DCFF001626E7 /* BitcoinRateService.swift */,
 				0D15405F2D22EF3400D6D63F /* AnalyticsService */,
 			);
@@ -418,6 +421,7 @@
 				1CA3B6582D22B0F500176711 /* SceneDelegate.swift in Sources */,
 				1CA3B6602D22B0F500176711 /* TransactionsTestTask.xcdatamodeld in Sources */,
 				C4A4BC9D2E5942A700A5F72F /* TransactionCell.swift in Sources */,
+				C4A4BCA62E5A2D7400A5F72F /* ReachabilityService.swift in Sources */,
 				0DF1D1402D22DC51001626E7 /* ServicesAssembler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
