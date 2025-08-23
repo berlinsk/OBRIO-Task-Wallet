@@ -37,18 +37,14 @@ enum ServicesAssembler {
     // MARK: - BitcoinRateService
     // service for fetching rate on a timer, publishing updates via Combine, caching last value to CoreData
     static let bitcoinRateService: PerformOnce<BitcoinRateService> = {
-        lazy var analyticsService = Self.analyticsService()
-        
-        let service = BitcoinRateServiceImpl(api: rateAPI(), cache: rateCache()) // inject api+cache
-        
-        // (main logging)
-        service.onRateUpdate = {
-            analyticsService.trackEvent(
-                name: "bitcoin_rate_update",
-                parameters: ["rate": String(format: "%.2f", $0)]
-            )
-        }
-        
+        let service = BitcoinRateServiceImpl(
+            api: rateAPI(),
+            cache: rateCache(),
+            analytics: analyticsService() //pass analytics to the service
+        )
+
+        service.onRateUpdate = { _ in } // callback
+
         return { service }
     }()
     

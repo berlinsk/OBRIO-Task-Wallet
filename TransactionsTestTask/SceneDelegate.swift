@@ -5,10 +5,12 @@
 //
 
 import UIKit
+import Combine
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    private var bag = Set<AnyCancellable>()
 
     func scene(
         _ scene: UIScene,
@@ -22,6 +24,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = root
         window.makeKeyAndVisible()
         self.window = window
+        
+        ServicesAssembler.analyticsService().eventsPublisher // analytics subscription, logs into console
+            .sink { event in
+                print("[Analytics]", event.name, event.parameters, event.date)
+            }
+            .store(in: &bag)
         ServicesAssembler.startRateObservers()
         ServicesAssembler.bitcoinRateService().startUpdating(every: 180) // 3 mins
     }

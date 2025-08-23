@@ -53,6 +53,13 @@ final class AddTransactionViewController: UIViewController {
                 category: cat,
                 date: Date()
             )
+            ServicesAssembler.analyticsService().trackEvent( // expence log
+                name: "expense_add",
+                parameters: [
+                    "amount_btc":"\(dec)",
+                    "category":cat.rawValue
+                ]
+            )
             NotificationCenter.default.post(name: .transactionsChanged, object: nil) //fire notification
             navigationController?.popViewController(animated: true) // back to home
         } catch {

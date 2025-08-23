@@ -25,13 +25,16 @@ final class BitcoinRateServiceImpl {
     
     private let api: RateAPIClient
     private let cache: RateCacheRepository
+    private let analytics:AnalyticsService //analytics
+    
     private var bag = Set<AnyCancellable>()
     private let subject = CurrentValueSubject<RateEntity?, Never>(nil) // holds current rate
     private var timerCancellable: AnyCancellable?
     
-    init(api: RateAPIClient, cache: RateCacheRepository) {
+    init(api: RateAPIClient, cache: RateCacheRepository, analytics:AnalyticsService) {
         self.api = api
         self.cache = cache
+        self.analytics=analytics
         if let cached = try? cache.load() { // load cached value from db at startup
             subject.send(cached)
         }
@@ -57,6 +60,16 @@ final class BitcoinRateServiceImpl {
                 let entity = RateEntity(usdPerBtc: dec, updatedAt: Date())
                 try? self.cache.save(entity) // store to coredata cache
                 self.subject.send(entity) // send new value to subscribers
+                
+                // log each successful fetch
+                self.analytics.trackEvent(
+                    name: "bitcoin_rate_update",
+                    parameters: [
+                        "rate":"\(dec)", // raw decimal to keep precision
+                        "ts":"\(entity.updatedAt.timeIntervalSince1970)"
+                    ]
+                )
+                
                 self.onRateUpdate?(NSDecimalNumber(decimal: dec).doubleValue) // fire legacy cb
             }
     }

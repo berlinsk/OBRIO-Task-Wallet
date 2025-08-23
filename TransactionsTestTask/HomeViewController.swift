@@ -78,6 +78,10 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         tableView.register(TransactionCell.self, forCellReuseIdentifier: TransactionCell.reuseID)
         tableView.delegate = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // logs button
+        let logsItem = UIBarButtonItem(title: "Logs", style: .plain, target: self, action: #selector(onShowLogs))
+        navigationItem.leftBarButtonItem = logsItem
 
         view.addSubview(balanceRow)
         view.addSubview(addButton)
@@ -142,6 +146,14 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
             hasMore = page.count == pageSize
             regroupAndApplySnapshot(reload: true) //redrawing
             updateBalanceLabel()
+            
+            ServicesAssembler.analyticsService().trackEvent( // pagination log
+                name: "tx_page_loaded",
+                parameters: [
+                    "offset":"\(offset)",
+                    "count":"\(page.count)"
+                ]
+            )
         } catch {
             print("Fetch page failed:", error)
         }
@@ -270,6 +282,12 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
                     category: nil,
                     date: Date()
                 )
+                ServicesAssembler.analyticsService().trackEvent( // top up opeartions log
+                    name: "topup_add",
+                    parameters: [
+                        "amount_btc":"\(dec)"
+                    ]
+                )
                 NotificationCenter.default.post(name: .transactionsChanged, object: nil) // reload
             } catch {
                 print("Top up failed:", error)
@@ -284,5 +302,25 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
 
     @objc private func onTxChanged() {
         loadFirstPage() // reload tx after change
+    }
+    
+    @objc private func onShowLogs() {
+        let events = ServicesAssembler.analyticsService().allEvents()
+        if events.isEmpty {
+            let ac = UIAlertController(title: "Logs", message: "No events yet", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+            return
+        }
+
+        // compact text assembly
+        let lines = events.map { ev in
+            let ts = ISO8601DateFormatter().string(from: ev.date)
+            return "\(ts) | \(ev.name) | \(ev.parameters)"
+        }.joined(separator: "\n")
+
+        let ac = UIAlertController(title: "Logs", message: lines, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
 }
