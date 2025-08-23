@@ -6,7 +6,7 @@
 
 import Foundation
 
-struct AnalyticsEvent {
+struct AnalyticsEvent: Codable, Equatable {
     
     let name: String
     let parameters: [String: String]
