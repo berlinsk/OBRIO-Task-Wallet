@@ -13,9 +13,15 @@ final class AddTransactionViewController: UIViewController {
     private let segment = UISegmentedControl(items: Category.allCases.map { $0.rawValue })
     private let addButton = UIButton(type: .system)
     
-    private let viewModel: AddTransactionViewModel = ServicesAssembler.makeAddTransactionViewModel()
+    private let viewModel: AddTransactionViewModel
     
     private var bag = Set<AnyCancellable>()
+    
+    init(viewModel: AddTransactionViewModel = ServicesAssembler.makeAddTransactionViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) { fatalError() }
 
     override func viewDidLoad() {
         super.viewDidLoad()

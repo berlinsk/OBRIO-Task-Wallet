@@ -42,6 +42,7 @@
 		C4A4BCB82E5A42C600A5F72F /* GetAllAnalyticsEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCB72E5A42C600A5F72F /* GetAllAnalyticsEvents.swift */; };
 		C4A4BCBA2E5A495600A5F72F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCB92E5A495600A5F72F /* HomeViewModel.swift */; };
 		C4A4BCBC2E5A7D7C00A5F72F /* AddTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCBB2E5A7D7C00A5F72F /* AddTransactionViewModel.swift */; };
+		C4A4BCBF2E5A897900A5F72F /* HomeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCBE2E5A897900A5F72F /* HomeModels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +102,7 @@
 		C4A4BCB72E5A42C600A5F72F /* GetAllAnalyticsEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllAnalyticsEvents.swift; sourceTree = "<group>"; };
 		C4A4BCB92E5A495600A5F72F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		C4A4BCBB2E5A7D7C00A5F72F /* AddTransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionViewModel.swift; sourceTree = "<group>"; };
+		C4A4BCBE2E5A897900A5F72F /* HomeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModels.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +181,7 @@
 		1CA3B6542D22B0F500176711 /* TransactionsTestTask */ = {
 			isa = PBXGroup;
 			children = (
+				C4A4BCBD2E5A83FB00A5F72F /* Resources */,
 				C4A4BCA72E5A39D600A5F72F /* Domain */,
 				C4A4BC9A2E59428C00A5F72F /* Presentation */,
 				C4A4BC8C2E590C3E00A5F72F /* Support */,
@@ -186,8 +189,6 @@
 				0DF1D13E2D22DC2D001626E7 /* Services */,
 				1CA3B6552D22B0F500176711 /* AppDelegate.swift */,
 				1CA3B6572D22B0F500176711 /* SceneDelegate.swift */,
-				1CA3B6612D22B0F600176711 /* Assets.xcassets */,
-				1CA3B6632D22B0F600176711 /* LaunchScreen.storyboard */,
 				1CA3B6662D22B0F600176711 /* Info.plist */,
 				1CA3B65E2D22B0F500176711 /* TransactionsTestTask.xcdatamodeld */,
 			);
@@ -281,6 +282,7 @@
 				C4A4BC9C2E5942A700A5F72F /* TransactionCell.swift */,
 				C4A4BCB92E5A495600A5F72F /* HomeViewModel.swift */,
 				1CA3B6592D22B0F500176711 /* HomeViewController.swift */,
+				C4A4BCBE2E5A897900A5F72F /* HomeModels.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -315,6 +317,15 @@
 				C4A4BCB72E5A42C600A5F72F /* GetAllAnalyticsEvents.swift */,
 			);
 			path = UseCases;
+			sourceTree = "<group>";
+		};
+		C4A4BCBD2E5A83FB00A5F72F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1CA3B6612D22B0F600176711 /* Assets.xcassets */,
+				1CA3B6632D22B0F600176711 /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -457,6 +468,7 @@
 				0DF1D1452D22DD06001626E7 /* BitcoinRateService.swift in Sources */,
 				0DF1D1472D22DD4A001626E7 /* AnalyticsService.swift in Sources */,
 				C4A4BC942E59141B00A5F72F /* RateCacheRepository.swift in Sources */,
+				C4A4BCBF2E5A897900A5F72F /* HomeModels.swift in Sources */,
 				1CA3B65A2D22B0F500176711 /* HomeViewController.swift in Sources */,
 				1CA3B6562D22B0F500176711 /* AppDelegate.swift in Sources */,
 				C4A4BC8F2E590C5700A5F72F /* Money.swift in Sources */,

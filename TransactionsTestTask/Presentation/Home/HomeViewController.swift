@@ -7,15 +7,9 @@
 import UIKit
 import Combine
 
-struct Section {
-    let key: String   // yyyy-mm-dd
-    let date: Date
-    var items: [TransactionEntity]
-}
-
 final class HomeViewController: UIViewController, UITableViewDelegate {
     // vm
-    private let viewModel = ServicesAssembler.makeHomeViewModel()
+    private let viewModel: HomeViewModel
     
     // UI
     private let balanceLabel = UILabel()
@@ -25,8 +19,6 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     private var rateItem: UIBarButtonItem!
 
     // data
-    private var sections: [Section] = []
-    private var txs: [TransactionEntity] = []
     private var dataSource: UITableViewDiffableDataSource<String, UUID>!
 
     // snapshot state
@@ -34,6 +26,12 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
 
     // combine
     private var bag = Set<AnyCancellable>()
+    
+    init(viewModel: HomeViewModel = ServicesAssembler.makeHomeViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) { fatalError() }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,13 +39,11 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         view.backgroundColor = .systemBackground
         setupUI()
         setupDataSource()
-        bindRate()
         bindViewModelOutputs()
 
         NotificationCenter.default.addObserver(self, selector: #selector(onTxChanged), name: .transactionsChanged, object: nil) // reload table when new tx added
 
         loadFirstPage()
-        updateBalanceLabel()
         viewModel.refreshBalance() // initial balance push
     }
 
@@ -112,20 +108,6 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         }
         dataSource.defaultRowAnimation = .fade
     }
-
-    private func bindRate() {
-        // subscribe btc rate updates
-        ServicesAssembler.observeRateUseCase().publisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] rate in
-                guard let self else { return }
-                let nf = NumberFormatter()
-                nf.numberStyle = .currency
-                nf.currencyCode = "USD"
-                self.rateItem.title = "1 BTC = \(nf.string(from: rate.usdPerBtc as NSDecimalNumber) ?? "-")"
-            }
-            .store(in: &bag)
-    }
     
     private func bindViewModelOutputs() {
         viewModel.rateText
@@ -180,26 +162,6 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
             dataSource.apply(snapshot, animatingDifferences: !reload) { [weak self] in
                 self?.isApplyingSnapshot = false
             }
-        }
-    }
-
-    private static func dayKey(from date: Date) -> String {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd"
-        return df.string(from: date)
-    }
-    private static func dayDate(fromKey key: String) -> Date? {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd"
-        return df.date(from: key)
-    }
-
-    private func updateBalanceLabel() { // recalc balance from repo
-        do {
-            let btc = try ServicesAssembler.getBalanceUseCase().execute()
-            balanceLabel.text = "Balance: \(Money.formatBTC(btc)) BTC"
-        } catch {
-            balanceLabel.text = "Balance: —"
         }
     }
     
