@@ -10,12 +10,10 @@ import Combine
 import UIKit
 
 protocol HomeViewModel {
-    // outputs
     var rateText: AnyPublisher<String, Never> { get }
     var balanceText: AnyPublisher<String, Never> { get }
     var snapshot: AnyPublisher<NSDiffableDataSourceSnapshot<String, UUID>, Never> { get }
 
-    // inputs
     func refreshBalance()
     func topUp(amountBTC: Decimal)
     
@@ -34,7 +32,7 @@ final class HomeViewModelImpl: HomeViewModel {
     private let getBalance: GetBalanceUseCase
     private let addIncome: AddIncomeUseCase
     private let trackEvent: TrackEventUseCase
-    private let getPage: GetTransactionsPageUseCase
+    private let getPage: GetTransactionsForPageUseCase
     
     // paging state
     private var txs: [TransactionEntity] = []
@@ -44,7 +42,6 @@ final class HomeViewModelImpl: HomeViewModel {
     private var isLoading = false
     private var hasMore = true
 
-    // outputs subjects
     private let balanceSubject = CurrentValueSubject<String, Never>("Balance: —")
     private let snapshotSubject = CurrentValueSubject<NSDiffableDataSourceSnapshot<String, UUID>, Never>(.init())
 
@@ -54,7 +51,7 @@ final class HomeViewModelImpl: HomeViewModel {
          getBalance: GetBalanceUseCase,
          addIncome: AddIncomeUseCase,
          trackEvent: TrackEventUseCase,
-         getPage: GetTransactionsPageUseCase) {
+         getPage: GetTransactionsForPageUseCase) {
         self.observeRate = observeRate
         self.getBalance = getBalance
         self.addIncome = addIncome
@@ -62,7 +59,6 @@ final class HomeViewModelImpl: HomeViewModel {
         self.getPage = getPage
     }
 
-    // outputs
     var rateText: AnyPublisher<String, Never> {
         observeRate.publisher
             .map { rate in
@@ -81,8 +77,9 @@ final class HomeViewModelImpl: HomeViewModel {
     var snapshot: AnyPublisher<NSDiffableDataSourceSnapshot<String, UUID>, Never> {
         snapshotSubject.eraseToAnyPublisher()
     }
+}
 
-    // inputs
+extension HomeViewModelImpl {
     func refreshBalance() {
         do {
             let btc = try getBalance.execute()
@@ -98,7 +95,7 @@ final class HomeViewModelImpl: HomeViewModel {
                 amountBTC: amountBTC,
                 date: Date()
             )
-            trackEvent.execute( // top up opeartions log
+            trackEvent.execute( //log
                 "topup_add",
                 [
                     "amount_btc": "\(amountBTC)"
@@ -122,7 +119,9 @@ final class HomeViewModelImpl: HomeViewModel {
     }
     
     func loadNextPage() {
-        guard !isLoading, hasMore else { return }
+        guard !isLoading, hasMore else {
+            return
+        }
         isLoading = true
         do {
             let page = try getPage.execute(offset: offset, limit: pageSize)
@@ -160,7 +159,10 @@ final class HomeViewModelImpl: HomeViewModel {
     }
 
     func shouldLoadMore(near indexPath: IndexPath) -> Bool {
-        guard !sections.isEmpty else { return false }
+        guard !sections.isEmpty else {
+            return false
+        }
+        
         let lastSection = max(sections.count - 1, 0)
         if indexPath.section == lastSection {
             let lastRow = sections[lastSection].items.count - 3
@@ -168,9 +170,10 @@ final class HomeViewModelImpl: HomeViewModel {
         }
         return false
     }
-    
-    private func regroup() {
-        // group tx by day
+}
+
+private extension HomeViewModelImpl {
+    func regroup() { //by day
         let cal = Calendar.current
         let grouped = Dictionary(grouping: txs) { (tx: TransactionEntity) -> String in
             let d = cal.startOfDay(for: tx.createdAt)
@@ -179,13 +182,13 @@ final class HomeViewModelImpl: HomeViewModel {
 
         var tmp: [Section] = grouped.map { (key, items) in
             let d = Self.dayDate(fromKey: key)!
-            return Section(key: key, date: d, items: items.sorted { ($0.createdAt, $0.id.uuidString) > ($1.createdAt, $1.id.uuidString) })
+            return Section(key: key, date: d, items: items.sorted {($0.createdAt, $0.id.uuidString) > ($1.createdAt, $1.id.uuidString) })
         }
         tmp.sort { $0.date > $1.date }
         sections = tmp
     }
 
-    private func applySnapshot() {
+    func applySnapshot() {
         // apply diffable snapshot
         var snapshot = NSDiffableDataSourceSnapshot<String, UUID>()
         snapshot.appendSections(sections.map { $0.key })
@@ -195,13 +198,13 @@ final class HomeViewModelImpl: HomeViewModel {
         snapshotSubject.send(snapshot)
     }
 
-    private static func dayKey(from date: Date) -> String {
+    static func dayKey(from date: Date) -> String {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd"
         return df.string(from: date)
     }
 
-    private static func dayDate(fromKey key: String) -> Date? {
+    static func dayDate(fromKey key: String) -> Date? {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd"
         return df.date(from: key)

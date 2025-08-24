@@ -9,6 +9,25 @@ import XCTest
 import Combine
 @testable import TransactionsTestTask
 
+// MARK: - Mock
+final class ReachabilityMonitorMock: ReachabilityMonitor {
+    var onUpdate: ((Bool) -> Void)?
+    private(set) var started = false
+    private(set) var cancelled = false
+
+    func start(queue: DispatchQueue) {
+        started = true
+    }
+    
+    func cancel() {
+        cancelled = true
+    }
+
+    func send(_ value: Bool) {
+        onUpdate?(value)
+    }
+}
+
 // MARK: Test
 final class ReachabilityServiceTests: XCTestCase {
 
@@ -44,7 +63,7 @@ final class ReachabilityServiceTests: XCTestCase {
             }
             .store(in: &bag)
 
-        mock.send(true) //2nd event
+        mock.send(true)
         wait(for: [exp], timeout: 1.0)
         XCTAssertEqual(received, [false, true])
     }
@@ -61,13 +80,19 @@ final class ReachabilityServiceTests: XCTestCase {
         svc.publisher
             .dropFirst()
             .prefix(1)
-            .sink { v in v1 = v; e1.fulfill() }
+            .sink { v in
+                v1 = v
+                e1.fulfill()
+            }
             .store(in: &bag)
 
         svc.publisher
             .dropFirst()
             .prefix(1)
-            .sink { v in v2 = v; e2.fulfill() }
+            .sink { v in
+                v2 = v
+                e2.fulfill()
+            }
             .store(in: &bag)
 
         mock.send(true)
@@ -77,7 +102,7 @@ final class ReachabilityServiceTests: XCTestCase {
         XCTAssertEqual(v2, true)
     }
 
-    //2 identical vals ​​in a row dont pass(so we must c heck removeDuplicates)
+    //2 identical vals ​​in a row dont pass
     func test_removeDuplicates() {
         let exp = expectation(description: "initial false+first true only")
         exp.expectedFulfillmentCount = 2 //false val + truev al
@@ -88,7 +113,9 @@ final class ReachabilityServiceTests: XCTestCase {
         svc.publisher
             .sink { v in
                 values.append(v)
-                if values.count <= 2 { exp.fulfill() }
+                if values.count <= 2 {
+                    exp.fulfill()
+                }
             }
             .store(in: &bag)
 
@@ -113,16 +140,4 @@ final class ReachabilityServiceTests: XCTestCase {
     func test_monitor_started() {
         XCTAssertTrue(mock.started, "monitor should start on init")
     }
-}
-
-// MARK: - Mock
-final class ReachabilityMonitorMock: ReachabilityMonitoring {
-    var onUpdate: ((Bool) -> Void)?
-    private(set) var started = false
-    private(set) var cancelled = false
-
-    func start(queue: DispatchQueue) { started = true }
-    func cancel() { cancelled = true }
-
-    func send(_ value: Bool) { onUpdate?(value) }
 }

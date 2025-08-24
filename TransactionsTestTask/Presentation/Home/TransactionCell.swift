@@ -12,7 +12,7 @@ final class TransactionCell: UITableViewCell {
 
     private let timeLabel = UILabel()
     private let categoryLabel = UILabel()
-    private let amountLabel = UILabel() // btc amount
+    private let amountLabel = UILabel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -43,8 +43,12 @@ final class TransactionCell: UITableViewCell {
         ])
     }
 
-    required init?(coder: NSCoder) { fatalError() }
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+}
 
+extension TransactionCell {
     func configure(with tx: TransactionEntity) {
         let df = DateFormatter()
         df.dateFormat = "HH:mm"

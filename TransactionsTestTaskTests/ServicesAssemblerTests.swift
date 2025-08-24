@@ -9,7 +9,7 @@ import XCTest
 import Combine
 @testable import TransactionsTestTask
 
-// CoinBase stub via urlprotocol
+// CoinBase stub
 private final class MockURLProtocol: URLProtocol {
     static var stubJSON: String = #"{"data":{"rates":{"USD":"65000.00"}}}"#
     static var status: Int = 200
@@ -17,10 +17,16 @@ private final class MockURLProtocol: URLProtocol {
     override class func canInit(with request: URLRequest) -> Bool {
         request.url?.host?.contains("api.coinbase.com") == true
     }
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+        request
+    }
 
     override func startLoading() {
-        guard let client = client else { return }
+        guard let client = client else {
+            return
+        }
+        
         let url = request.url ?? URL(string: "https://api.coinbase.com")!
         let resp = HTTPURLResponse(
             url: url,
@@ -35,7 +41,7 @@ private final class MockURLProtocol: URLProtocol {
     override func stopLoading() {}
 
     static func setRate(_ dec: Decimal) {
-        Self.stubJSON = #"{"data":{"rates":{"USD":"\#(dec)"}}}"# //putting the number as a string without formattin(as the API would return)
+        Self.stubJSON = #"{"data":{"rates":{"USD":"\#(dec)"}}}"#
     }
 }
 
@@ -46,7 +52,7 @@ final class ServicesAssemblerTests: XCTestCase {
 
     private func uniqueRate() -> Decimal {
         tick += 1
-        return Decimal(65000 + tick) + Decimal(string: "0.01")! //different values ​​in order to removeDuplicates not working
+        return Decimal(65000 + tick) + Decimal(string: "0.01")!
     }
 
     override func setUp() {
@@ -87,7 +93,7 @@ final class ServicesAssemblerTests: XCTestCase {
         XCTAssertTrue(s1 === s2)
     }
 
-    //count events only for a specific course
+    //count events for  course
     func test_startRateObservers_logsForEachModule() {
         let analytics = ServicesAssembler.analyticsService()
         analytics.clear()
@@ -95,7 +101,7 @@ final class ServicesAssemblerTests: XCTestCase {
         let modules = 7
         ServicesAssembler.startRateObservers(count: modules)
 
-        // issuing the rate R and waitingg(after, we count only events with rate=R)
+        // emissioming the rate
         let R = uniqueRate()
         MockURLProtocol.setRate(R)
         ServicesAssembler.refreshRateNowUseCase().execute()
@@ -105,7 +111,7 @@ final class ServicesAssemblerTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(got, modules, "AT LEAST \(modules) logs should come for one emission")
     }
 
-    // repeated start should not increase the number of subscribers, the number of logs for R2 should match the number of logs for R1
+    // repeated start should not increase the number of subscribers
     func test_startRateObservers_isIdempotent() {
         let analytics = ServicesAssembler.analyticsService()
         analytics.clear()
@@ -113,17 +119,16 @@ final class ServicesAssemblerTests: XCTestCase {
         let modules = 5
         ServicesAssembler.startRateObservers(count: modules)
 
-        // 1st emission(we only count events with this value)
+        // 1st emission
         let R1 = uniqueRate()
         MockURLProtocol.setRate(R1)
         ServicesAssembler.refreshRateNowUseCase().execute()
         spinRunLoop(0.35)
         let c1 = countModuleLogs(forRate: R1, since: nil)
 
-        // restarting process should not add new subscribers
         ServicesAssembler.startRateObservers(count: modules)
 
-        // 2nd emission(again we count only events with new value)
+        // 2nd emission
         let R2 = uniqueRate()
         MockURLProtocol.setRate(R2)
         ServicesAssembler.refreshRateNowUseCase().execute()
@@ -133,20 +138,21 @@ final class ServicesAssemblerTests: XCTestCase {
         XCTAssertEqual(c2, c1, "restarting process should not add subscribers")
     }
 
-    // MARK: - Helpers
-    // get num of btc_rate_module_update with the specified rate
     private func countModuleLogs(forRate rate: Decimal, since from: Date?) -> Int {
         let all = ServicesAssembler.analyticsService()
             .events(name: "btc_rate_module_update", from: from, to: nil)
 
         return all.filter { ev in
-            guard let s = ev.parameters["rate"], let dec = Decimal(string: s) else { return false }
+            guard let s = ev.parameters["rate"], let dec = Decimal(string: s) else {
+                return false
+            }
             return dec == rate
         }.count
     }
 
     private func spinRunLoop(_ seconds: TimeInterval) {
         let until = Date().addingTimeInterval(seconds)
+        
         while Date() < until {
             RunLoop.current.run(mode: .default, before: Date().addingTimeInterval(0.01))
         }

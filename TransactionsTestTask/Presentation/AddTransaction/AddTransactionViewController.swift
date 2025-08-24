@@ -9,8 +9,8 @@ import UIKit
 import Combine
 
 final class AddTransactionViewController: UIViewController {
-    private let amountField = UITextField() //input for btc amount
-    private let segment = UISegmentedControl(items: Category.allCases.map { $0.rawValue })
+    private let amountField = UITextField()
+    private let segment = UISegmentedControl(items: TransactionCategory.allCases.map { $0.rawValue })
     private let addButton = UIButton(type: .system)
     
     private let viewModel: AddTransactionViewModel
@@ -21,7 +21,10 @@ final class AddTransactionViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    required init?(coder: NSCoder) { fatalError() }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +40,7 @@ final class AddTransactionViewController: UIViewController {
         addButton.setTitle("Add", for: .normal)
         addButton.addTarget(self, action: #selector(onAdd), for: .touchUpInside)
 
-        //stack with field + segment + button
+        //field+segment+button
         let v = UIStackView(arrangedSubviews: [amountField, segment, addButton])
         v.axis = .vertical
         v.spacing = 16
@@ -54,7 +57,7 @@ final class AddTransactionViewController: UIViewController {
         viewModel.didAdd
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
-                self?.navigationController?.popViewController(animated: true) // back to home
+                self?.navigationController?.popViewController(animated: true)
             }
             .store(in: &bag)
         
@@ -64,10 +67,12 @@ final class AddTransactionViewController: UIViewController {
     }
 
     @objc private func onAdd() {
-        guard let text = amountField.text?.replacingOccurrences(of: ",", with: "."), //read field, replace , to .
-              let dec = Decimal(string: text), dec > 0 else { return }
+        guard let text = amountField.text?.replacingOccurrences(of: ",", with: "."),
+              let dec = Decimal(string: text), dec > 0 else {
+            return
+        }
 
-        let cat = Category.allCases[segment.selectedSegmentIndex] // get chosen category
+        let cat = TransactionCategory.allCases[segment.selectedSegmentIndex]
         viewModel.addExpense(amountBTC: dec, category: cat)
     }
 }

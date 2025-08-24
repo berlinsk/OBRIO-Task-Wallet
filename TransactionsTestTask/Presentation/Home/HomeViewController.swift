@@ -31,7 +31,10 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    required init?(coder: NSCoder) { fatalError() }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,11 +51,9 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     }
 
     private func setupUI() {
-        // rate(top bar right)
         rateItem = UIBarButtonItem(title: "—", style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem = rateItem
 
-        // balance + top up
         balanceLabel.font = .monospacedDigitSystemFont(ofSize: 22, weight: .bold)
         topUpButton.setTitle("Top up", for: .normal)
         topUpButton.addTarget(self, action: #selector(onTopUp), for: .touchUpInside)
@@ -64,17 +65,14 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         balanceRow.distribution = .equalSpacing
         balanceRow.translatesAutoresizingMaskIntoConstraints = false
 
-        // transaction button
         addButton.setTitle("Add transaction", for: .normal)
         addButton.addTarget(self, action: #selector(onAddTransaction), for: .touchUpInside)
         addButton.translatesAutoresizingMaskIntoConstraints = false
 
-        // table
         tableView.register(TransactionCell.self, forCellReuseIdentifier: TransactionCell.reuseID)
         tableView.delegate = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
-        // logs button
         let logsItem = UIBarButtonItem(title: "Logs", style: .plain, target: self, action: #selector(onShowLogs))
         navigationItem.leftBarButtonItem = logsItem
 
@@ -100,7 +98,9 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     private func setupDataSource() {
         // diffable ds for tx list
         dataSource = UITableViewDiffableDataSource<String, UUID>(tableView: tableView) { [weak self] tableView, indexPath, _ in
-            guard let self else { return UITableViewCell() }
+            guard let self else {
+                return UITableViewCell()
+            }
             let cell = tableView.dequeueReusableCell(withIdentifier: TransactionCell.reuseID, for: indexPath) as! TransactionCell
             let tx = self.viewModel.transaction(at: indexPath)
             cell.configure(with: tx)
@@ -124,7 +124,6 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
             }
             .store(in: &bag)
         
-        // compiled snapshot from vm
         viewModel.snapshot
             .receive(on: DispatchQueue.main)
             .sink { [weak self] snapshot in
@@ -133,32 +132,35 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
             .store(in: &bag)
     }
 
-    // loading/grouping
     private func loadFirstPage() {
         viewModel.loadFirstPage()
     }
 
     private func loadNextPage() {
-        guard !isApplyingSnapshot else { return } //doesnt load if busy or no more or snapshot aplying
+        guard !isApplyingSnapshot else {
+            return
+        } //doesnt load if busy or no more or snapshot aplying
         viewModel.loadNextPage()
     }
 
     private func regroupAndApplySnapshot(reload: Bool = true) {
-        // group tx by day
+        //by day
         let snapshot = viewModel.currentSnapshot()
         applySnapshot(snapshot, reload: reload)
     }
     
     // prevent double apply
     private func applySnapshot(_ snapshot: NSDiffableDataSourceSnapshot<String, UUID>, reload: Bool) {
-        guard !isApplyingSnapshot else { return }
+        guard !isApplyingSnapshot else {
+            return
+        }
         isApplyingSnapshot = true
 
         if #available(iOS 15.0, *), reload { //ios15+ use reloadData ver
             dataSource.applySnapshotUsingReloadData(snapshot) { [weak self] in
                 self?.isApplyingSnapshot = false
             }
-        } else { // old ios use usual apply
+        } else { // usual apply
             dataSource.apply(snapshot, animatingDifferences: !reload) { [weak self] in
                 self?.isApplyingSnapshot = false
             }
@@ -189,14 +191,14 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         return container
     }
 
-    // table delegate for header height
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 28
     }
 
-    // table delegate for pagination trigger
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if isApplyingSnapshot { return } //doesnt paginate during apply
+        if isApplyingSnapshot {
+            return
+        } //doesnt paginate during apply
         if viewModel.shouldLoadMore(near: indexPath) {
             loadNextPage()
         }
@@ -212,7 +214,9 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         ac.addAction(UIAlertAction(title: "Add", style: .default, handler: { _ in
             guard let t = ac.textFields?.first?.text?.replacingOccurrences(of: ",", with: "."),
-                  let dec = Decimal(string: t), dec > 0 else { return }
+                  let dec = Decimal(string: t), dec > 0 else {
+                return
+            }
             self.viewModel.topUp(amountBTC: dec)
         }))
         present(ac, animated: true)
@@ -222,9 +226,10 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         navigationController?.pushViewController(AddTransactionViewController(), animated: true) // navigation second screen
     }
 
+    // reload + sync
     @objc private func onTxChanged() {
-        loadFirstPage() // reload tx after change
-        viewModel.refreshBalance() // sync balance with vm
+        loadFirstPage()
+        viewModel.refreshBalance()
     }
     
     @objc private func onShowLogs() {

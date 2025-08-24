@@ -9,14 +9,21 @@ import XCTest
 import Combine
 @testable import TransactionsTestTask
 
-// MARK: - Test doubles
-//mock api client for rate fetching
+// MARK: Mocks
+
+// api client
 private final class RateAPIClientMock: RateAPIClient {
-    enum Mode { case success(Decimal), failure(Error) }
+    enum Mode {
+        case success(Decimal)
+        case failure(Error)
+    }
+    
     var mode: Mode
+    
     init(mode: Mode) {
         self.mode = mode
     }
+    
     func fetchBtcUsd() -> AnyPublisher<Decimal, Error> {
         switch mode {
         case .success(let d):
@@ -27,35 +34,66 @@ private final class RateAPIClientMock: RateAPIClient {
     }
 }
 
-//mock cache repository for saving/loading rates
+//for saving/loading rates
 private final class RateCacheRepositoryMock: RateCacheRepository {
     var saved: RateEntity?
     var loaded: RateEntity?
-    func load() throws -> RateEntity? { loaded }
-    func save(_ rate: RateEntity) throws { saved = rate }
+    
+    func load() throws -> RateEntity? {
+        loaded
+    }
+    
+    func save(_ rate: RateEntity) throws {
+        saved = rate
+    }
 }
 
 //mock analytics service with event capturing
 private final class AnalyticsServiceMock: AnalyticsService {
-    struct Item { let name:String; let params:[String:String] }
+    struct Item {
+        let name:String
+        let params:[String:String]
+    }
+    
     private let subject = PassthroughSubject<AnalyticsEvent,Never>()
-    var eventsPublisher: AnyPublisher<AnalyticsEvent, Never> { subject.eraseToAnyPublisher() }
+    
+    var eventsPublisher: AnyPublisher<AnalyticsEvent, Never> {
+        subject.eraseToAnyPublisher()
+    }
+    
     private(set) var tracked: [Item] = []
+    
     func trackEvent(name: String, parameters: [String : String]) {
         tracked.append(.init(name: name, params: parameters))
         subject.send(.init(name: name, parameters: parameters, date: Date()))
     }
-    func events(name: String?, from: Date?, to: Date?) -> [AnalyticsEvent] { [] }
-    func eventsCount() -> Int { tracked.count }
-    func allEvents() -> [AnalyticsEvent] { [] }
-    func clear() { tracked.removeAll() }
+    
+    func events(name: String?, from: Date?, to: Date?) -> [AnalyticsEvent] {
+        []
+    }
+    
+    func eventsCount() -> Int {
+        tracked.count
+    }
+    
+    func allEvents() -> [AnalyticsEvent] {
+        []
+    }
+    
+    func clear() {
+        tracked.removeAll()
+    }
+    
     func removeOlderThan(_ date: Date) {}
-    func exportJSON(prettyPrinted: Bool) throws -> Data { Data() }
+    
+    func exportJSON(prettyPrinted: Bool) throws -> Data {
+        Data()
+    }
+    
     func importJSON(_ data: Data) throws {}
 }
 
 // MARK: - Tests
-
 final class BitcoinRateServiceTests: XCTestCase {
     private var bag = Set<AnyCancellable>()
 
@@ -78,7 +116,7 @@ final class BitcoinRateServiceTests: XCTestCase {
 
         sut.refreshNow()
 
-        // checking emission, cache save, analytics track
+        //check emission, cache save, analytics track
         wait(for: [exp], timeout: 1.0)
         XCTAssertEqual(received?.usdPerBtc, Decimal(string: "65000.42"))
         XCTAssertEqual(cache.saved?.usdPerBtc, Decimal(string: "65000.42"))
@@ -112,7 +150,10 @@ final class BitcoinRateServiceTests: XCTestCase {
 
     //given failing api client
     func test_refreshNow_ignoresFailures_noEmission_noTracking() {
-        enum E: Error { case oops }
+        enum E: Error {
+            case oops
+        }
+        
         let api = RateAPIClientMock(mode: .failure(E.oops))
         let cache = RateCacheRepositoryMock()
         let analytics = AnalyticsServiceMock()
@@ -120,7 +161,9 @@ final class BitcoinRateServiceTests: XCTestCase {
 
         let exp = expectation(description: "no emission")
         exp.isInverted = true
-        sut.ratePublisher.sink { _ in exp.fulfill() }.store(in: &bag)
+        sut.ratePublisher.sink { _ in
+            exp.fulfill()
+        }.store(in: &bag)
 
         sut.refreshNow()
 
@@ -171,6 +214,6 @@ final class BitcoinRateServiceTests: XCTestCase {
         }
 
         sut.refreshNow()
-        wait(for: [exp], timeout: 1.0) // callback is called with correct rate
+        wait(for: [exp], timeout: 1.0)
     }
 }
