@@ -96,6 +96,27 @@ private final class AnalyticsServiceMock: AnalyticsService {
 // MARK: - Tests
 final class BitcoinRateServiceTests: XCTestCase {
     private var bag = Set<AnyCancellable>()
+    
+    func test_init_emitsCachedValue_ifExists() throws {
+        let cached = RateEntity(usdPerBtc: Decimal(string: "77777.77")!, updatedAt: Date()) //given cached value present
+        let api = RateAPIClientMock(mode: .success(Decimal(1)))
+        let cache = RateCacheRepositoryMock()
+        cache.loaded = cached
+        let analytics = AnalyticsServiceMock()
+        let sut = BitcoinRateServiceImpl(api: api, cache: cache, analytics: analytics)
+
+        let exp = expectation(description: "emits cached on init")
+        var received: RateEntity?
+        sut.ratePublisher
+            .sink { v in
+                received = v
+                exp.fulfill()
+            }
+            .store(in: &bag)
+
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertEqual(received?.usdPerBtc, cached.usdPerBtc)
+    }
 
     func test_refreshNow_emits_saves_and_tracks() {
         //given success api with fixed rate
@@ -146,6 +167,37 @@ final class BitcoinRateServiceTests: XCTestCase {
         XCTAssertEqual(cache.saved?.usdPerBtc, Decimal(12345))
         XCTAssertEqual(analytics.eventsCount(), 1)
         sut.stop()
+    }
+    
+    func test_stop_preventsFurtherEmissions() {
+        let api = RateAPIClientMock(mode: .success(Decimal(999)))
+        let cache = RateCacheRepositoryMock()
+        let analytics = AnalyticsServiceMock()
+        let sut = BitcoinRateServiceImpl(api: api, cache: cache, analytics: analytics)
+
+        let firstExp = expectation(description: "first immediate emission")
+        sut.ratePublisher
+            .prefix(1)
+            .sink { _ in firstExp.fulfill() }
+            .store(in: &bag)
+
+        //deny emissions
+        let noMoreExp = expectation(description: "no further emissions after stop")
+        noMoreExp.isInverted = true
+        sut.ratePublisher
+            .dropFirst(1)
+            .sink { _ in noMoreExp.fulfill() }
+            .store(in: &bag)
+
+        sut.startUpdating(every: 0.05)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) {
+            sut.stop()
+        }
+
+        wait(for: [firstExp], timeout: 1.0)
+
+        wait(for: [noMoreExp], timeout: 0.2) //nothing arrived after stop
     }
 
     //given failing api client
