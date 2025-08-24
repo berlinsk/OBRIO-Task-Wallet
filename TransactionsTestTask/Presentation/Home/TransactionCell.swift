@@ -7,15 +7,15 @@
 
 import UIKit
 
-final class TransactionCell: UITableViewCell {
-    static let reuseID = "TransactionCell"
+final class TransactionItemCell: UICollectionViewCell {
+    static let reuseID = "TransactionItemCell"
 
     private let timeLabel = UILabel()
     private let categoryLabel = UILabel()
     private let amountLabel = UILabel()
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
 
         timeLabel.font = .systemFont(ofSize: 13)
         timeLabel.textColor = .secondaryLabel
@@ -29,11 +29,15 @@ final class TransactionCell: UITableViewCell {
         left.axis = .vertical
         left.spacing = 2
 
-        let h = UIStackView(arrangedSubviews: [left, amountLabel]) //main h stack
+        let h = UIStackView(arrangedSubviews: [left, amountLabel])
         h.alignment = .center
         h.spacing = 12
         h.translatesAutoresizingMaskIntoConstraints = false
+
         contentView.addSubview(h)
+        contentView.backgroundColor = .secondarySystemGroupedBackground
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
 
         NSLayoutConstraint.activate([
             h.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -48,7 +52,7 @@ final class TransactionCell: UITableViewCell {
     }
 }
 
-extension TransactionCell {
+extension TransactionItemCell {
     func configure(with tx: TransactionEntity) {
         let df = DateFormatter()
         df.dateFormat = "HH:mm"

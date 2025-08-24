@@ -7,7 +7,7 @@
 import UIKit
 import Combine
 
-final class HomeViewController: UIViewController, UITableViewDelegate {
+final class HomeViewController: UIViewController, UICollectionViewDelegate {
     // vm
     private let viewModel: HomeViewModel
     
@@ -15,11 +15,14 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     private let balanceLabel = UILabel()
     private let topUpButton = UIButton(type: .system)
     private let addButton = UIButton(type: .system)
-    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var rateItem: UIBarButtonItem!
 
+    private lazy var collectionView: UICollectionView = {
+        UICollectionView(frame: .zero, collectionViewLayout: Self.makeLayout())
+    }()
+
     // data
-    private var dataSource: UITableViewDiffableDataSource<String, UUID>!
+    private var dataSource: UICollectionViewDiffableDataSource<String, UUID>!
 
     // snapshot state
     private var isApplyingSnapshot = false
@@ -39,15 +42,38 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Wallet"
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGroupedBackground
         setupUI()
         setupDataSource()
         bindViewModelOutputs()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(onTxChanged), name: .transactionsChanged, object: nil) // reload table when new tx added
+        NotificationCenter.default.addObserver(self, selector: #selector(onTxChanged), name: .transactionsChanged, object: nil)
 
         loadFirstPage()
-        viewModel.refreshBalance() // initial balance push
+        viewModel.refreshBalance()
+    }
+
+    private static func makeLayout() -> UICollectionViewCompositionalLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .estimated(56))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .estimated(56))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 16, bottom: 8, trailing: 16)
+        section.interGroupSpacing = 8
+
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(28))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: SectionHeaderView.kind,
+            alignment: .top)
+        section.boundarySupplementaryItems = [header]
+
+        return UICollectionViewCompositionalLayout(section: section)
     }
 
     private func setupUI() {
@@ -69,16 +95,18 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
         addButton.addTarget(self, action: #selector(onAddTransaction), for: .touchUpInside)
         addButton.translatesAutoresizingMaskIntoConstraints = false
 
-        tableView.register(TransactionCell.self, forCellReuseIdentifier: TransactionCell.reuseID)
-        tableView.delegate = self
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
+        collectionView.backgroundColor = .clear
+        collectionView.delegate = self
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(TransactionItemCell.self, forCellWithReuseIdentifier: TransactionItemCell.reuseID)
+        collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: SectionHeaderView.kind, withReuseIdentifier: SectionHeaderView.reuseID)
+
         let logsItem = UIBarButtonItem(title: "Logs", style: .plain, target: self, action: #selector(onShowLogs))
         navigationItem.leftBarButtonItem = logsItem
 
         view.addSubview(balanceRow)
         view.addSubview(addButton)
-        view.addSubview(tableView)
+        view.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
             balanceRow.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
@@ -88,25 +116,39 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
             addButton.topAnchor.constraint(equalTo: balanceRow.bottomAnchor, constant: 12),
             addButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
 
-            tableView.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 8),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: addButton.bottomAnchor, constant: 8),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
     private func setupDataSource() {
-        // diffable ds for tx list
-        dataSource = UITableViewDiffableDataSource<String, UUID>(tableView: tableView) { [weak self] tableView, indexPath, _ in
+        dataSource = UICollectionViewDiffableDataSource<String, UUID>(collectionView: collectionView) { [weak self] cv, indexPath, _ in
             guard let self else {
-                return UITableViewCell()
+                return UICollectionViewCell()
             }
-            let cell = tableView.dequeueReusableCell(withIdentifier: TransactionCell.reuseID, for: indexPath) as! TransactionCell
+            let cell = cv.dequeueReusableCell(withReuseIdentifier: TransactionItemCell.reuseID, for: indexPath) as! TransactionItemCell
             let tx = self.viewModel.transaction(at: indexPath)
             cell.configure(with: tx)
             return cell
         }
-        dataSource.defaultRowAnimation = .fade
+
+        dataSource.supplementaryViewProvider = { [weak self] cv, kind, indexPath in
+            guard let self,
+                  kind == SectionHeaderView.kind,
+                  let header = cv.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                   withReuseIdentifier: SectionHeaderView.reuseID,
+                                                                   for: indexPath) as? SectionHeaderView else {
+                return nil
+            }
+            let secDate = self.viewModel.sectionDate(for: indexPath.section)
+            let df = DateFormatter()
+            df.dateStyle = .medium
+            df.timeStyle = .none
+            header.setTitle(df.string(from: secDate))
+            return header
+        }
     }
     
     private func bindViewModelOutputs() {
@@ -132,23 +174,6 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
             .store(in: &bag)
     }
 
-    private func loadFirstPage() {
-        viewModel.loadFirstPage()
-    }
-
-    private func loadNextPage() {
-        guard !isApplyingSnapshot else {
-            return
-        } //doesnt load if busy or no more or snapshot aplying
-        viewModel.loadNextPage()
-    }
-
-    private func regroupAndApplySnapshot(reload: Bool = true) {
-        //by day
-        let snapshot = viewModel.currentSnapshot()
-        applySnapshot(snapshot, reload: reload)
-    }
-    
     // prevent double apply
     private func applySnapshot(_ snapshot: NSDiffableDataSourceSnapshot<String, UUID>, reload: Bool) {
         guard !isApplyingSnapshot else {
@@ -166,45 +191,27 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
             }
         }
     }
+
+    private func loadFirstPage() {
+        viewModel.loadFirstPage()
+    }
     
-    // table delegate for section headers
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let secDate = viewModel.sectionDate(for: section)
-        let df = DateFormatter()
-        df.dateStyle = .medium
-        df.timeStyle = .none
-        let title = df.string(from: secDate)
-
-        let label = UILabel()
-        label.text = title
-        label.font = .systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = .secondaryLabel
-
-        let container = UIView()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(label)
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
-            label.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor, constant: -16),
-            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
-        ])
-        return container
+    private func loadNextPage() {
+        guard !isApplyingSnapshot else {
+            return
+        }
+        viewModel.loadNextPage()
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 28
-    }
-
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if isApplyingSnapshot {
             return
-        } //doesnt paginate during apply
+        }
         if viewModel.shouldLoadMore(near: indexPath) {
             loadNextPage()
         }
     }
 
-    // actions
     @objc private func onTopUp() {
         let ac = UIAlertController(title: "Top up", message: "Enter amount in BTC", preferredStyle: .alert)
         ac.addTextField { tf in
@@ -223,7 +230,7 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
     }
 
     @objc private func onAddTransaction() {
-        navigationController?.pushViewController(AddTransactionViewController(), animated: true) // navigation second screen
+        navigationController?.pushViewController(AddTransactionViewController(), animated: true)
     }
 
     // reload + sync
@@ -240,13 +247,10 @@ final class HomeViewController: UIViewController, UITableViewDelegate {
             present(ac, animated: true)
             return
         }
-
-        // compact text assembly
+        
         let iso = ISO8601DateFormatter()
-        let lines = events.map { ev in
-            "\(iso.string(from: ev.date)) | \(ev.name) | \(ev.parameters)"
-        }.joined(separator: "\n")
-
+        let lines = events.map { "\(iso.string(from: $0.date)) | \($0.name) | \($0.parameters)" }
+            .joined(separator: "\n")
         let ac = UIAlertController(title: "Logs", message: lines, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
