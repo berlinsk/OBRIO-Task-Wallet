@@ -43,6 +43,7 @@
 		C4A4BCBC2E5A7D7C00A5F72F /* AddTransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCBB2E5A7D7C00A5F72F /* AddTransactionViewModel.swift */; };
 		C4A4BCBF2E5A897900A5F72F /* HomeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCBE2E5A897900A5F72F /* HomeModels.swift */; };
 		C4A4BCC12E5A906400A5F72F /* BitcoinRateServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCC02E5A906300A5F72F /* BitcoinRateServiceTests.swift */; };
+		C4ABF42A2E5AA2F9000AFF34 /* ServicesAssemblerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ABF4292E5AA2F9000AFF34 /* ServicesAssemblerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 		C4A4BCBE2E5A897900A5F72F /* HomeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModels.swift; sourceTree = "<group>"; };
 		C4A4BCC02E5A906300A5F72F /* BitcoinRateServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinRateServiceTests.swift; sourceTree = "<group>"; };
 		C4ABF4262E5A9CA9000AFF34 /* TransactionsTestTask.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TransactionsTestTask.xctestplan; sourceTree = "<group>"; };
+		C4ABF4292E5AA2F9000AFF34 /* ServicesAssemblerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesAssemblerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				C4A4BCC02E5A906300A5F72F /* BitcoinRateServiceTests.swift */,
+				C4ABF4292E5AA2F9000AFF34 /* ServicesAssemblerTests.swift */,
 			);
 			path = TransactionsTestTaskTests;
 			sourceTree = "<group>";
@@ -500,6 +503,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4ABF42A2E5AA2F9000AFF34 /* ServicesAssemblerTests.swift in Sources */,
 				C4A4BCC12E5A906400A5F72F /* BitcoinRateServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

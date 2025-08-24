@@ -5,6 +5,7 @@
 //
 
 import Combine
+import Foundation
 /// Services Assembler is used for Dependency Injection
 /// There is an example of a _bad_ services relationship built on `onRateUpdate` callback
 /// This kind of relationship must be refactored with a more convenient and reliable approach
@@ -13,6 +14,12 @@ import Combine
 /// Imagine having rate updates in 20-50 diffent modules
 /// Make this logic not depending on any module
 enum ServicesAssembler {
+    
+    final class Observer {
+        let name: String
+        var bag = Set<AnyCancellable>() //keep subscriptions alive per observer
+        init(name: String) { self.name = name }
+    }
     
     //local storage of di layer subscriptions(to avoid debinding)
     private static var _bag = Set<AnyCancellable>()
@@ -98,16 +105,13 @@ enum ServicesAssembler {
     // MARK: - Observers for simulation(20–50 modules)
     // creates N independent subscribers to the ratePublisher and logs each update(simulates 20–50 modules listening to rate updates)
     static func startRateObservers(count: Int = 30) {
-        struct Observer {
-            let name: String
-            var bag = Set<AnyCancellable>() //keep subscriptions alive per observer
-        }
         if _observers.isEmpty { //initialize only once
             let analytics = analyticsService()
             for i in 1...count {
-                var obs = Observer(name: "Module-\(i)")
+                let obs = Observer(name: "Module-\(i)")
                 bitcoinRateService().ratePublisher
-                    .sink { rate in
+                    .sink { [weak obs] rate in
+                        guard let obs else { return }
                         print("[\(obs.name)] BTC rate updated: \(rate.usdPerBtc) at \(rate.updatedAt)") // demo log to console +analytics event per observer
                         analytics.trackEvent(
                             name: "btc_rate_module_update",
@@ -172,5 +176,5 @@ enum ServicesAssembler {
         return { uc }
     }()
     
-    private static var _observers: [Any] = [] // retained holders for observers(they aren't deallocated)
+    private static var _observers: [Observer] = [] // retained holders for observers(they aren't deallocated)
 }
