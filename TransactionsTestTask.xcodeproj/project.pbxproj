@@ -210,10 +210,7 @@
 		1CA3B66E2D22B0F600176711 /* TransactionsTestTaskTests */ = {
 			isa = PBXGroup;
 			children = (
-				C4A4BCC02E5A906300A5F72F /* BitcoinRateServiceTests.swift */,
-				C4ABF4292E5AA2F9000AFF34 /* ServicesAssemblerTests.swift */,
-				C4ABF42D2E5B4B69000AFF34 /* ReachabilityServiceTests.swift */,
-				C4ABF4342E5B6F8B000AFF34 /* AnalyticsSevriceTests.swift */,
+				C4ABF46F2E5BBE65000AFF34 /* Services */,
 			);
 			path = TransactionsTestTaskTests;
 			sourceTree = "<group>";
@@ -438,6 +435,17 @@
 				C4A4BC8E2E590C5700A5F72F /* Money.swift */,
 			);
 			path = Money;
+			sourceTree = "<group>";
+		};
+		C4ABF46F2E5BBE65000AFF34 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C4A4BCC02E5A906300A5F72F /* BitcoinRateServiceTests.swift */,
+				C4ABF4292E5AA2F9000AFF34 /* ServicesAssemblerTests.swift */,
+				C4ABF42D2E5B4B69000AFF34 /* ReachabilityServiceTests.swift */,
+				C4ABF4342E5B6F8B000AFF34 /* AnalyticsSevriceTests.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

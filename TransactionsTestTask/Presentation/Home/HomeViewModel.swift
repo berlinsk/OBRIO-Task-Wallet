@@ -44,6 +44,14 @@ final class HomeViewModelImpl: HomeViewModel {
 
     private let balanceSubject = CurrentValueSubject<String, Never>("Balance: —")
     private let snapshotSubject = CurrentValueSubject<NSDiffableDataSourceSnapshot<String, UUID>, Never>(.init())
+    private let rateTextSubject = CurrentValueSubject<String, Never>("1 BTC = —")
+    
+    private let usdFormatter: NumberFormatter = {
+        let nf = NumberFormatter()
+        nf.numberStyle = .currency
+        nf.currencyCode = "USD"
+        return nf
+    }()
 
     private var bag = Set<AnyCancellable>()
 
@@ -57,17 +65,23 @@ final class HomeViewModelImpl: HomeViewModel {
         self.addIncome = addIncome
         self.trackEvent = trackEvent
         self.getPage = getPage
+        
+        observeRate.publisher
+            .map { [weak self] rate -> String in
+                guard let self else {
+                    return "1 BTC = —"
+                }
+                return "1 BTC = \(self.usdFormatter.string(from: rate.usdPerBtc as NSDecimalNumber) ?? "—")"
+            }
+            .removeDuplicates()
+            .sink { [weak self] text in
+                self?.rateTextSubject.send(text)
+            }
+            .store(in: &bag)
     }
 
     var rateText: AnyPublisher<String, Never> {
-        observeRate.publisher
-            .map { rate in
-                let nf = NumberFormatter()
-                nf.numberStyle = .currency
-                nf.currencyCode = "USD"
-                return "1 BTC = \(nf.string(from: rate.usdPerBtc as NSDecimalNumber) ?? "-")"
-            }
-            .eraseToAnyPublisher()
+        rateTextSubject.eraseToAnyPublisher()
     }
 
     var balanceText: AnyPublisher<String, Never> {
