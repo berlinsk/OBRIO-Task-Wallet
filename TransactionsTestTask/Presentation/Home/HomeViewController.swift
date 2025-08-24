@@ -30,7 +30,7 @@ final class HomeViewController: UIViewController, UICollectionViewDelegate {
     // combine
     private var bag = Set<AnyCancellable>()
     
-    init(viewModel: HomeViewModel = ServicesAssembler.makeHomeViewModel()) {
+    init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -230,7 +230,9 @@ final class HomeViewController: UIViewController, UICollectionViewDelegate {
     }
 
     @objc private func onAddTransaction() {
-        navigationController?.pushViewController(AddTransactionViewController(), animated: true)
+        let factory = UseCaseFactory()
+        let vm = AddTransactionViewModelImpl(factory: factory)
+        navigationController?.pushViewController(AddTransactionViewController(viewModel: vm), animated: true)
     }
 
     // reload + sync

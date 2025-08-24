@@ -69,16 +69,6 @@ final class ServicesAssemblerTests: XCTestCase {
         super.tearDown()
     }
 
-    func test_makeHomeViewModel_returnsImplementation() {
-        let vm = ServicesAssembler.makeHomeViewModel()
-        XCTAssertTrue(vm is HomeViewModelImpl)
-    }
-
-    func test_makeAddTransactionViewModel_returnsImplementation() {
-        let vm = ServicesAssembler.makeAddTransactionViewModel()
-        XCTAssertTrue(vm is AddTransactionViewModelImpl)
-    }
-
     func test_services_areSingletons() {
         let r1 = ServicesAssembler.transactionsRepository()
         let r2 = ServicesAssembler.transactionsRepository()

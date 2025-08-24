@@ -22,12 +22,11 @@ final class AddTransactionViewModelImpl: AddTransactionViewModel {
     private let didAddSubject = PassthroughSubject<Void, Never>()
     private let errorSubject = PassthroughSubject<String, Never>()
 
-    init(addExpense: AddExpenseUseCase, trackEvent: TrackEventUseCase) {
-        self.addExpenseUC = addExpense
-        self.trackEvent = trackEvent
+    init(factory: UseCaseFactory) {
+        self.addExpenseUC = factory.addExpense()
+        self.trackEvent = factory.trackEvent()
     }
 
-    // output
     var didAdd: AnyPublisher<Void, Never> {
         didAddSubject.eraseToAnyPublisher()
     }
@@ -37,7 +36,6 @@ final class AddTransactionViewModelImpl: AddTransactionViewModel {
 }
 
 extension AddTransactionViewModelImpl {
-    // input
     func addExpense(amountBTC: Decimal, category: TransactionCategory) {
         do {
             try addExpenseUC.execute(

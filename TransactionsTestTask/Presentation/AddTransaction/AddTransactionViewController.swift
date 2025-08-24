@@ -17,7 +17,7 @@ final class AddTransactionViewController: UIViewController {
     
     private var bag = Set<AnyCancellable>()
     
-    init(viewModel: AddTransactionViewModel = ServicesAssembler.makeAddTransactionViewModel()) {
+    init(viewModel: AddTransactionViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

@@ -135,23 +135,6 @@ enum ServicesAssembler {
 }
 
 extension ServicesAssembler {
-    // MARK: - vm factories
-    static func makeHomeViewModel() -> HomeViewModel {
-        HomeViewModelImpl(
-            observeRate: observeRateUseCase(),
-            getBalance: getBalanceUseCase(),
-            addIncome: addIncomeUseCase(),
-            trackEvent: trackEventUseCase(),
-            getPage: getTransactionsPageUseCase()
-        )
-    }
-    
-    static func makeAddTransactionViewModel() -> AddTransactionViewModel {
-        AddTransactionViewModelImpl(
-            addExpense: addExpenseUseCase(),
-            trackEvent: trackEventUseCase()
-        )
-    }
     
     // MARK: - Observers for simulation(20–50 modules)
     static func startRateObservers(count: Int = 30) {// N independent subscribers

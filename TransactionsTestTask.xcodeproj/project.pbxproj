@@ -54,6 +54,7 @@
 		C4ABF4612E5B8463000AFF34 /* RateEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ABF4602E5B8463000AFF34 /* RateEntity.swift */; };
 		C4ABF4682E5B86C8000AFF34 /* RefreshRateNowUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ABF4672E5B86C8000AFF34 /* RefreshRateNowUseCase.swift */; };
 		C4ABF4712E5BC3C2000AFF34 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ABF4702E5BC3C2000AFF34 /* SectionHeaderView.swift */; };
+		C4ABF4732E5BCFEC000AFF34 /* UseCaseFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ABF4722E5BCFEC000AFF34 /* UseCaseFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,6 +127,7 @@
 		C4ABF4602E5B8463000AFF34 /* RateEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateEntity.swift; sourceTree = "<group>"; };
 		C4ABF4672E5B86C8000AFF34 /* RefreshRateNowUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshRateNowUseCase.swift; sourceTree = "<group>"; };
 		C4ABF4702E5BC3C2000AFF34 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
+		C4ABF4722E5BCFEC000AFF34 /* UseCaseFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCaseFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -385,6 +387,7 @@
 				C4ABF4532E5B7FDD000AFF34 /* Analytics */,
 				C4ABF44C2E5B7C9B000AFF34 /* Rate */,
 				C4ABF4422E5B7AD5000AFF34 /* Transactions */,
+				C4ABF4722E5BCFEC000AFF34 /* UseCaseFactory.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -621,6 +624,7 @@
 				C4A4BCAD2E5A39FA00A5F72F /* GetTransactionsForPageUseCase.swift in Sources */,
 				C4ABF45B2E5B82AF000AFF34 /* TransactionEntity.swift in Sources */,
 				C4A4BCBA2E5A495600A5F72F /* HomeViewModel.swift in Sources */,
+				C4ABF4732E5BCFEC000AFF34 /* UseCaseFactory.swift in Sources */,
 				C4A4BCB12E5A3A0B00A5F72F /* ObserveRateUseCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
