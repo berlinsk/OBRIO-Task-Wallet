@@ -5,12 +5,22 @@
 //
 
 import UIKit
+import Combine
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+    private var bag = Set<AnyCancellable>()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        ServicesAssembler.analyticsService().eventsPublisher
+            .sink { event in
+                print("[Analytics]", event.name, event.parameters, event.date)
+            }
+            .store(in: &bag)
+
+        ServicesAssembler.startRateObservers()
+        ServicesAssembler.startRateUpdatesUseCase().start(every: 180) // 3mins
         return true
     }
     

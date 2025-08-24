@@ -10,7 +10,6 @@ import Combine
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    private var bag = Set<AnyCancellable>()
 
     func scene(
         _ scene: UIScene,
@@ -22,20 +21,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         let window = UIWindow(windowScene: windowScene)
+        
         let factory = UseCaseFactory()
         let homeVM = HomeViewModelImpl(factory: factory)
         let root = UINavigationController(rootViewController: HomeViewController(viewModel: homeVM))
+        
         window.rootViewController = root
         window.makeKeyAndVisible()
         self.window = window
-        
-        ServicesAssembler.analyticsService().eventsPublisher // analytics subscription, logs into console
-            .sink { event in
-                print("[Analytics]", event.name, event.parameters, event.date)
-            }
-            .store(in: &bag)
-        ServicesAssembler.startRateObservers()
-        ServicesAssembler.startRateUpdatesUseCase().start(every: 180) //3 mins
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
