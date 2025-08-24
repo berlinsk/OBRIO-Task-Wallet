@@ -44,6 +44,9 @@
 		C4A4BCBF2E5A897900A5F72F /* HomeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCBE2E5A897900A5F72F /* HomeModels.swift */; };
 		C4A4BCC12E5A906400A5F72F /* BitcoinRateServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BCC02E5A906300A5F72F /* BitcoinRateServiceTests.swift */; };
 		C4ABF42A2E5AA2F9000AFF34 /* ServicesAssemblerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ABF4292E5AA2F9000AFF34 /* ServicesAssemblerTests.swift */; };
+		C4ABF42E2E5B4B69000AFF34 /* ReachabilityServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ABF42D2E5B4B69000AFF34 /* ReachabilityServiceTests.swift */; };
+		C4ABF4312E5B6AE9000AFF34 /* ReachabilityMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ABF4302E5B6AE9000AFF34 /* ReachabilityMonitoring.swift */; };
+		C4ABF4332E5B6B35000AFF34 /* ReachabilityMonitorAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4ABF4322E5B6B35000AFF34 /* ReachabilityMonitorAdapter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +109,9 @@
 		C4A4BCC02E5A906300A5F72F /* BitcoinRateServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinRateServiceTests.swift; sourceTree = "<group>"; };
 		C4ABF4262E5A9CA9000AFF34 /* TransactionsTestTask.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TransactionsTestTask.xctestplan; sourceTree = "<group>"; };
 		C4ABF4292E5AA2F9000AFF34 /* ServicesAssemblerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesAssemblerTests.swift; sourceTree = "<group>"; };
+		C4ABF42D2E5B4B69000AFF34 /* ReachabilityServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityServiceTests.swift; sourceTree = "<group>"; };
+		C4ABF4302E5B6AE9000AFF34 /* ReachabilityMonitoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityMonitoring.swift; sourceTree = "<group>"; };
+		C4ABF4322E5B6B35000AFF34 /* ReachabilityMonitorAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityMonitorAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +151,7 @@
 		0DF1D13E2D22DC2D001626E7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				C4ABF42F2E5B6A88000AFF34 /* ReachabilityService */,
 				0DF1D1412D22DCC3001626E7 /* Helpers */,
 				0DF1D13F2D22DC4B001626E7 /* ServicesAssembler.swift */,
 				C4A4BCA52E5A2D7400A5F72F /* ReachabilityService.swift */,
@@ -158,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				0DF1D1422D22DCD2001626E7 /* PerformOnce.swift */,
+				C4ABF4302E5B6AE9000AFF34 /* ReachabilityMonitoring.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -204,6 +212,7 @@
 			children = (
 				C4A4BCC02E5A906300A5F72F /* BitcoinRateServiceTests.swift */,
 				C4ABF4292E5AA2F9000AFF34 /* ServicesAssemblerTests.swift */,
+				C4ABF42D2E5B4B69000AFF34 /* ReachabilityServiceTests.swift */,
 			);
 			path = TransactionsTestTaskTests;
 			sourceTree = "<group>";
@@ -331,6 +340,14 @@
 				1CA3B6632D22B0F600176711 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		C4ABF42F2E5B6A88000AFF34 /* ReachabilityService */ = {
+			isa = PBXGroup;
+			children = (
+				C4ABF4322E5B6B35000AFF34 /* ReachabilityMonitorAdapter.swift */,
+			);
+			path = ReachabilityService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -483,12 +500,14 @@
 				C4A4BCA42E594BC400A5F72F /* AddTransactionViewController.swift in Sources */,
 				C4A4BC7F2E58FA6400A5F72F /* CoreDataStack.swift in Sources */,
 				C4A4BCB82E5A42C600A5F72F /* GetAllAnalyticsEvents.swift in Sources */,
+				C4ABF4332E5B6B35000AFF34 /* ReachabilityMonitorAdapter.swift in Sources */,
 				C4A4BCBC2E5A7D7C00A5F72F /* AddTransactionViewModel.swift in Sources */,
 				C4A4BC7B2E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift in Sources */,
 				C4A4BC7C2E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift in Sources */,
 				C4A4BC7D2E58F9E300A5F72F /* CDTransaction+CoreDataProperties.swift in Sources */,
 				1CA3B6582D22B0F500176711 /* SceneDelegate.swift in Sources */,
 				1CA3B6602D22B0F500176711 /* TransactionsTestTask.xcdatamodeld in Sources */,
+				C4ABF4312E5B6AE9000AFF34 /* ReachabilityMonitoring.swift in Sources */,
 				C4A4BC9D2E5942A700A5F72F /* TransactionCell.swift in Sources */,
 				C4A4BCA92E5A39E400A5F72F /* AddIncomeUseCase.swift in Sources */,
 				C4A4BCA62E5A2D7400A5F72F /* ReachabilityService.swift in Sources */,
@@ -504,6 +523,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4ABF42A2E5AA2F9000AFF34 /* ServicesAssemblerTests.swift in Sources */,
+				C4ABF42E2E5B4B69000AFF34 /* ReachabilityServiceTests.swift in Sources */,
 				C4A4BCC12E5A906400A5F72F /* BitcoinRateServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

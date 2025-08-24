@@ -6,22 +6,26 @@
 //
 
 import Foundation
-import Network
 import Combine
 
 final class ReachabilityService {
-    private let monitor = NWPathMonitor()
+    private let monitor: ReachabilityMonitoring
     private let queue = DispatchQueue(label: "reachability.monitor")
-    private let subject = PassthroughSubject<Bool,Never>() //true=network's available
+    private let subject = CurrentValueSubject<Bool, Never>(false) //true=network's available
 
-    var publisher: AnyPublisher<Bool,Never> { subject.eraseToAnyPublisher() }
-
-    init() {
-        monitor.pathUpdateHandler = { [weak self] path in
-            self?.subject.send(path.status == .satisfied)
-        }
-        monitor.start(queue: queue)
+    var publisher: AnyPublisher<Bool, Never> {
+        subject.removeDuplicates().eraseToAnyPublisher()
     }
 
-    deinit { monitor.cancel() }
+    init(monitor: ReachabilityMonitoring = ReachabilityMonitorAdapter()) {
+        self.monitor = monitor
+        self.monitor.onUpdate = { [weak self] available in
+            self?.subject.send(available)
+        }
+        self.monitor.start(queue: queue)
+    }
+
+    deinit {
+        monitor.cancel()
+    }
 }
