@@ -1,0 +1,11 @@
+.DS_Store
+
+*.xcuserdatad
+*.xcscmblueprint
+*.xccheckout
+*.xcworkspace/xcuserdata
+project.xcworkspace/xcuserdata
+DerivedData/
+.build/
+Pods/
+Podfile.lock

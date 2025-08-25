@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "334C631B-2CC1-4718-9139-4EF7CB425321",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:TransactionsTestTask.xcodeproj",
+      "identifier" : "1CA3B6512D22B0F500176711",
+      "name" : "TransactionsTestTask"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:TransactionsTestTask.xcodeproj",
+        "identifier" : "1CA3B66A2D22B0F600176711",
+        "name" : "TransactionsTestTaskTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:TransactionsTestTask.xcodeproj",
+        "identifier" : "1CA3B6742D22B0F600176711",
+        "name" : "TransactionsTestTaskUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
