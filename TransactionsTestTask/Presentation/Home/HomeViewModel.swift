@@ -56,11 +56,11 @@ final class HomeViewModelImpl: HomeViewModel {
     private var bag = Set<AnyCancellable>()
 
     init(factory: UseCaseFactory) {
-        self.observeRate = factory.observeRate()
-        self.getBalance = factory.getBalance()
-        self.addIncome = factory.addIncome()
-        self.trackEvent = factory.trackEvent()
-        self.getPage = factory.getTransactionsPage()
+        self.observeRate = factory.observeRate
+        self.getBalance = factory.getBalance
+        self.addIncome = factory.addIncome
+        self.trackEvent = factory.trackEvent
+        self.getPage = factory.getTransactionsPage
         
         observeRate.publisher
             .map { [weak self] rate -> String in

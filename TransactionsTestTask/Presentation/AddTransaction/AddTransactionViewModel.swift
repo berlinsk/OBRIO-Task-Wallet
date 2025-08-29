@@ -23,8 +23,8 @@ final class AddTransactionViewModelImpl: AddTransactionViewModel {
     private let errorSubject = PassthroughSubject<String, Never>()
 
     init(factory: UseCaseFactory) {
-        self.addExpenseUC = factory.addExpense()
-        self.trackEvent = factory.trackEvent()
+        self.addExpenseUC = factory.addExpense
+        self.trackEvent = factory.trackEvent
     }
 
     var didAdd: AnyPublisher<Void, Never> {

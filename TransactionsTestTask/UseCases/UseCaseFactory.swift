@@ -7,23 +7,32 @@
 
 import Foundation
 
-struct UseCaseFactory {
-    func observeRate() -> ObserveRateUseCase {
+protocol UseCaseFactory {
+    var observeRate: ObserveRateUseCase { get }
+    var getBalance: GetBalanceUseCase { get }
+    var addIncome: AddIncomeUseCase { get }
+    var addExpense: AddExpenseUseCase { get }
+    var getTransactionsPage: GetTransactionsForPageUseCase { get }
+    var trackEvent: TrackEventUseCase { get }
+}
+
+struct UseCaseFactoryImpl: UseCaseFactory {
+    var observeRate: ObserveRateUseCase {
         ServicesAssembler.observeRateUseCase()
     }
-    func getBalance() -> GetBalanceUseCase {
+    var getBalance: GetBalanceUseCase {
         ServicesAssembler.getBalanceUseCase()
     }
-    func addIncome() -> AddIncomeUseCase {
+    var addIncome: AddIncomeUseCase {
         ServicesAssembler.addIncomeUseCase()
     }
-    func addExpense() -> AddExpenseUseCase {
+    var addExpense: AddExpenseUseCase {
         ServicesAssembler.addExpenseUseCase()
     }
-    func getTransactionsPage() -> GetTransactionsForPageUseCase {
+    var getTransactionsPage: GetTransactionsForPageUseCase {
         ServicesAssembler.getTransactionsPageUseCase()
     }
-    func trackEvent() -> TrackEventUseCase {
+    var trackEvent: TrackEventUseCase {
         ServicesAssembler.trackEventUseCase()
     }
 }
