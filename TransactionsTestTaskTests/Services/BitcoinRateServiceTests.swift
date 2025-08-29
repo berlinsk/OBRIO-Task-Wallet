@@ -12,7 +12,7 @@ import Combine
 // MARK: Mocks
 
 // api client
-private final class RateAPIClientMock: RateAPIClient {
+final class RateAPIClientMock: RateAPIClient {
     enum Mode {
         case success(Decimal)
         case failure(Error)
@@ -35,7 +35,7 @@ private final class RateAPIClientMock: RateAPIClient {
 }
 
 //for saving/loading rates
-private final class RateCacheRepositoryMock: RateCacheRepository {
+final class RateCacheRepositoryMock: RateCacheRepository {
     var saved: RateEntity?
     var loaded: RateEntity?
     
@@ -49,7 +49,7 @@ private final class RateCacheRepositoryMock: RateCacheRepository {
 }
 
 //mock analytics service with event capturing
-private final class AnalyticsServiceMock: AnalyticsService {
+final class AnalyticsServiceMock: AnalyticsService {
     struct Item {
         let name:String
         let params:[String:String]
