@@ -10,7 +10,7 @@ import Combine
 @testable import TransactionsTestTask
 
 // CoinBase stub
-private final class MockURLProtocol: URLProtocol {
+final class MockURLProtocol: URLProtocol {
     static var stubJSON: String = #"{"data":{"rates":{"USD":"65000.00"}}}"#
     static var status: Int = 200
 

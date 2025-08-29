@@ -18,6 +18,7 @@
 		1CA3B6602D22B0F500176711 /* TransactionsTestTask.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1CA3B65E2D22B0F500176711 /* TransactionsTestTask.xcdatamodeld */; };
 		1CA3B6622D22B0F600176711 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3B6612D22B0F600176711 /* Assets.xcassets */; };
 		1CA3B6652D22B0F600176711 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1CA3B6642D22B0F600176711 /* Base */; };
+		C480CFA92E61FDCD003585C8 /* HomeViewModelImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C480CFA82E61FDCD003585C8 /* HomeViewModelImplTests.swift */; };
 		C4A4BC7A2E58F9E300A5F72F /* CDRateCache+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC762E58F9E300A5F72F /* CDRateCache+CoreDataClass.swift */; };
 		C4A4BC7B2E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC772E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift */; };
 		C4A4BC7C2E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A4BC782E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift */; };
@@ -90,6 +91,7 @@
 		1CA3B6662D22B0F600176711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1CA3B66B2D22B0F600176711 /* TransactionsTestTaskTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TransactionsTestTaskTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CA3B6752D22B0F600176711 /* TransactionsTestTaskUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TransactionsTestTaskUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C480CFA82E61FDCD003585C8 /* HomeViewModelImplTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelImplTests.swift; sourceTree = "<group>"; };
 		C4A4BC762E58F9E300A5F72F /* CDRateCache+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDRateCache+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C4A4BC772E58F9E300A5F72F /* CDRateCache+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDRateCache+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C4A4BC782E58F9E300A5F72F /* CDTransaction+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDTransaction+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -214,9 +216,18 @@
 		1CA3B66E2D22B0F600176711 /* TransactionsTestTaskTests */ = {
 			isa = PBXGroup;
 			children = (
+				C480CFA72E61FD8A003585C8 /* ViewModels */,
 				C4ABF46F2E5BBE65000AFF34 /* Services */,
 			);
 			path = TransactionsTestTaskTests;
+			sourceTree = "<group>";
+		};
+		C480CFA72E61FD8A003585C8 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				C480CFA82E61FDCD003585C8 /* HomeViewModelImplTests.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		C4A4BC732E58F99F00A5F72F /* Data */ = {
@@ -636,6 +647,7 @@
 				C4ABF42A2E5AA2F9000AFF34 /* ServicesAssemblerTests.swift in Sources */,
 				C4ABF42E2E5B4B69000AFF34 /* ReachabilityServiceTests.swift in Sources */,
 				C4ABF4352E5B6F8B000AFF34 /* AnalyticsSevriceTests.swift in Sources */,
+				C480CFA92E61FDCD003585C8 /* HomeViewModelImplTests.swift in Sources */,
 				C4A4BCC12E5A906400A5F72F /* BitcoinRateServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

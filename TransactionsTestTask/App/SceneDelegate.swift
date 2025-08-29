@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let window = UIWindow(windowScene: windowScene)
         
-        let factory = UseCaseFactory()
+        let factory = UseCaseFactoryImpl()
         let homeVM = HomeViewModelImpl(factory: factory)
         let root = UINavigationController(rootViewController: HomeViewController(viewModel: homeVM))
         

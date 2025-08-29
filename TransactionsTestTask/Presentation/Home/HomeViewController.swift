@@ -230,7 +230,7 @@ final class HomeViewController: UIViewController, UICollectionViewDelegate {
     }
 
     @objc private func onAddTransaction() {
-        let factory = UseCaseFactory()
+        let factory = UseCaseFactoryImpl()
         let vm = AddTransactionViewModelImpl(factory: factory)
         navigationController?.pushViewController(AddTransactionViewController(viewModel: vm), animated: true)
     }
